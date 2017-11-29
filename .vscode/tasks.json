@@ -1,0 +1,37 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build Test App",
+      "type": "npm",
+      "script": "build:app",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build Library",
+      "type": "npm",
+      "script": "build:lib",
+      "problemMatcher": []
+    },
+    {
+      "label": "Static Codeanalysis",
+      "type": "npm",
+      "script": "lint",
+      "problemMatcher": "$tslint5"
+    },
+    {
+      "label": "Install npm package locally",
+      "type": "shell",
+      "command": "npm install ./dist/lib",
+      "problemMatcher": []
+    },
+    {
+      "label": "Remove locally installed npm package",
+      "type": "shell",
+      "command": "npm rm @proffix/restapi-angular-library",
+      "problemMatcher": []
+    }
+  ]
+}
