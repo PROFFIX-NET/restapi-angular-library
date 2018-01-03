@@ -6,9 +6,9 @@ import { RestApiModelInterface } from '../../';
 export interface Belegart extends RestApiModelInterface {
   BelegartNr?: string;
   Bezeichnung?: string;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

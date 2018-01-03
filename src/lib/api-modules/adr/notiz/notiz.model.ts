@@ -9,13 +9,13 @@ export interface Notiz extends RestApiModelInterface {
   Kontakt?: Kontakt;
   Mitarbeiter?: Mitarbeiter;
   Notizart?: Notizart;
-  Datum?: Date;
-  Termin?: Date;
+  Datum?: string;
+  Termin?: string;
   Notiz?: string;
   NotizRTF?: string;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

@@ -17,9 +17,9 @@ export interface Bank extends RestApiModelInterface {
   SwiftNummer?: string;
   ServerTyp?: number;
   Geloescht?: boolean;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

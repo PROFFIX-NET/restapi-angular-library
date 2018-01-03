@@ -5,5 +5,5 @@ import { RestApiModelInterface } from '../../base-interfaces';
  */
 export interface Info extends RestApiModelInterface {
   Version?: string;
-  ServerZeit?: Date;
+  ServerZeit?: string;
 }

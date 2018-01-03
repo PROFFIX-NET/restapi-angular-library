@@ -7,7 +7,7 @@ export interface Stunden extends RestApiModelInterface {
   StundenNr?: number;
   Mitarbeiter?: Mitarbeiter;
   Stundenart?: Stundenart;
-  Datum?: Date;
+  Datum?: string;
   StartZeit?: string;
   EndZeit?: string;
   Stunden?: number;
@@ -25,9 +25,9 @@ export interface Stunden extends RestApiModelInterface {
   Kuerzung?: boolean;
   KuerzungMonat?: boolean;
   gesperrt?: boolean;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

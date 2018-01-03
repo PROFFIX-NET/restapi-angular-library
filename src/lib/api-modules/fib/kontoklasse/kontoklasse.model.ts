@@ -7,9 +7,9 @@ export interface Kontoklasse extends RestApiModelInterface {
   KontoklasseNr?: string;
   Bezeichnung?: string;
   Kontotyp?: number;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

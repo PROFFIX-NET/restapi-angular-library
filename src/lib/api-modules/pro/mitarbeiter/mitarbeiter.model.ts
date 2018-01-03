@@ -13,9 +13,9 @@ export interface Mitarbeiter extends RestApiModelInterface {
   Feriensaldo?: number;
   BadgeID?: string;
   Geloescht?: boolean;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

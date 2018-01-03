@@ -9,9 +9,9 @@ export interface Waehrung extends RestApiModelInterface {
   Kurs?: number;
   Verhaeltnis?: number;
   Rundung?: number;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

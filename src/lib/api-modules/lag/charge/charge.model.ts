@@ -7,9 +7,9 @@ export interface Charge extends RestApiModelInterface {
   ChargeNr?: string;
   Bezeichnung?: string;
   Inaktiv?: boolean;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

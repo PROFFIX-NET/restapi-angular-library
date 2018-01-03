@@ -7,16 +7,16 @@ export interface Auftrag extends RestApiModelInterface {
   AuftragNr?: string;
   Bezeichnung?: string;
   Kunde?: Adresse;
-  StartDatum?: Date;
-  EndDatum?: Date;
+  StartDatum?: string;
+  EndDatum?: string;
   Positionsart?: Positionsart;
   Artikel?: Artikel;
   Kostenstelle?: Kostenstelle;
   Kostenart?: Kostenart;
   Ertragskonto?: Konto;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

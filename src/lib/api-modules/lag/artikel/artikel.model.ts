@@ -37,9 +37,9 @@ export interface Artikel extends RestApiModelInterface {
   Steuercode3?: Steuercode;
   Steuercode4?: Steuercode;
   Steuercode5?: Steuercode;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

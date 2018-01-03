@@ -9,9 +9,9 @@ export interface Steuercode extends RestApiModelInterface {
   Prozent?: number;
   InklusivMWST?: boolean;
   Konto?: Konto;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

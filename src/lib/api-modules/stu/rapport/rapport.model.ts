@@ -42,7 +42,7 @@ export interface Rapport extends RestApiModelInterface {
   Dim2?: number;
   Dim3?: number;
   Lagerpreis?: number;
-  Datum?: Date;
+  Datum?: string;
   Positionsart?: Positionsart;
   KaWo?: string;
   StartZeit?: string;
@@ -95,9 +95,9 @@ export interface Rapport extends RestApiModelInterface {
   }[];
   Verrechnen?: boolean;
   Steuercode?: Steuercode;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

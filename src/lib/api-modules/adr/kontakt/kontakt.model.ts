@@ -27,9 +27,9 @@ export interface Kontakt extends RestApiModelInterface {
   Land?: Land;
   Hauptadresse?: boolean;
   AdresseGleichHauptadresse?: boolean;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

@@ -16,9 +16,9 @@ export interface Einheitsmatrix extends RestApiModelInterface {
   Divisor?: number;
   Multiplikator?: number;
   Rundung?: number;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

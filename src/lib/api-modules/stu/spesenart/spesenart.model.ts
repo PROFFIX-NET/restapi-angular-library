@@ -8,9 +8,9 @@ export interface Spesenart extends RestApiModelInterface {
   Bezeichnung?: string;
   Betrag?: number;
   TextZwang?: boolean;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

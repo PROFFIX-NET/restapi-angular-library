@@ -22,9 +22,9 @@ export interface Zahlungsart extends RestApiModelInterface {
   TeilnehmerNummer?: string;
   ZahlArt?: number;
   ZahlungsartTyp?: string;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

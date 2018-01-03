@@ -8,9 +8,9 @@ export interface Stundenart extends RestApiModelInterface {
   Bezeichnung?: string;
   ZeitErfassen?: boolean;
   Vorgabezeit?: number;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

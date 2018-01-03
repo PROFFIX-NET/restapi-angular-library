@@ -16,9 +16,9 @@ export interface Positionsart extends RestApiModelInterface {
   KeinRabatt?: boolean;
   Ferien?: boolean;
   StdPreis?: number;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

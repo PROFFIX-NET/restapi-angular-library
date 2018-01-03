@@ -50,9 +50,9 @@ export interface Adresse extends RestApiModelInterface {
   Vertreter?: Vertreter;
   DebitorenWaehrung?: Waehrung;
   Lagerpreis?: number;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

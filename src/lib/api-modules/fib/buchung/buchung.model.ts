@@ -11,13 +11,13 @@ import {
  */
 export interface Buchung extends RestApiModelInterface {
   BuchungNr?: number;
-  Buchungsdatum?: Date;
-  Belegdatum?: Date;
+  Buchungsdatum?: string;
+  Belegdatum?: string;
   Belegnummer?: number;
   Kondition?: Kondition;
   Buchungsart?: Buchungsart;
   EinzahlungMitteilung?: string;
-  Verfalldatum?: Date;
+  Verfalldatum?: string;
   Adresse?: Adresse;
   EsrKodierzeile?: string;
   EsrPruefziffer?: string;

@@ -7,9 +7,9 @@ export interface Projekt extends RestApiModelInterface {
   ProjektNr?: string;
   Bezeichnung?: string;
   Adresse?: Adresse;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

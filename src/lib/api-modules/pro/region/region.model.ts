@@ -7,9 +7,9 @@ export interface Region extends RestApiModelInterface {
   RegionNr?: string;
   Bezeichnung?: string;
   Land?: Land;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

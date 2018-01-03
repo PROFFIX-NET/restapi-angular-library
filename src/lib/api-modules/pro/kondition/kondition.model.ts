@@ -15,9 +15,9 @@ export interface Kondition extends RestApiModelInterface {
   Skonto1Prozent?: number;
   Skonto2Tage?: number;
   Skonto2Prozent?: number;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

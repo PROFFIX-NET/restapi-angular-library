@@ -22,7 +22,7 @@ export interface Buchungszeile {
   Waehrung?: Waehrung;
   Kurs?: number;
   MahnCode?: number;
-  MahnDatum?: Date;
+  MahnDatum?: string;
   Steuercode?: Steuercode;
   SteuerbetragFW?: number;
   SteuerbetragSW?: number;
@@ -33,10 +33,10 @@ export interface Buchungszeile {
   IstSteuerbuchung?: boolean;
   IstErfassteBuchung?: boolean;
   Zahlungsart?: Zahlungsart;
-  Zahlungsdatum?: Date;
-  ErstelltAm?: Date;
+  Zahlungsdatum?: string;
+  ErstelltAm?: string;
   ErstelltVon?: String;
-  GeandertAm?: Date;
+  GeandertAm?: string;
   GeandertVon?: String;
   Zusatzfelder?: any;
 }

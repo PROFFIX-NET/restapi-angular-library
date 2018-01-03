@@ -10,9 +10,9 @@ export interface SerieNummer extends RestApiModelInterface {
   Lagerplatz?: Lagerplatz;
   Charge?: Charge;
   Geloescht?: boolean;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

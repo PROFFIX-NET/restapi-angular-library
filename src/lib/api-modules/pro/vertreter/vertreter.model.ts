@@ -8,9 +8,9 @@ export interface Vertreter extends RestApiModelInterface {
   Name?: string;
   Mitarbeiter?: Mitarbeiter;
   Geloescht?: boolean;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

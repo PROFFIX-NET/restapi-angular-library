@@ -8,9 +8,9 @@ export interface Konto extends RestApiModelInterface {
   Bezeichnung?: string;
   Steuercode?: Steuercode;
   Kontoklasse?: Kontoklasse;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

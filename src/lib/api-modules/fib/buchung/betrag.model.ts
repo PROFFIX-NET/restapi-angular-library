@@ -9,8 +9,8 @@ export interface Betrag {
   Buchungstext?: string;
   Kostenart?: Kostenart;
   Kostenstelle?: Kostenstelle;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
 }

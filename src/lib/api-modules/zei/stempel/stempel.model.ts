@@ -5,6 +5,6 @@ import { RestApiModelInterface } from '../../';
  */
 export interface Stempel extends RestApiModelInterface {
   Eingestempelt?: boolean;
-  EinstempelnZeitpunkt?: Date;
+  EinstempelnZeitpunkt?: string;
   StundenNr?: number;
 }

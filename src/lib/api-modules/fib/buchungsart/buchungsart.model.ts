@@ -26,15 +26,15 @@ export interface Buchungsart extends RestApiModelInterface {
     Habenkonto?: Konto;
     SollKonto?: Konto;
     Hauptkonto?: boolean;
-    ErstelltAm?: Date;
+    ErstelltAm?: string;
     ErstelltVon?: string;
-    GeaendertAm?: Date;
+    GeaendertAm?: string;
     GeaendertVon?: string;
     Zusatzfelder?: any;
   }[];
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

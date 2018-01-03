@@ -7,9 +7,9 @@ export interface Einheit extends RestApiModelInterface {
   EinheitNr?: string;
   Bezeichnung?: string;
   Abkuerzung?: string;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }

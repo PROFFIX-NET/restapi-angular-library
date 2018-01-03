@@ -10,9 +10,9 @@ export interface Land extends RestApiModelInterface {
   Waehrung?: Waehrung;
   SADCode?: number;
   CodePost?: string;
-  ErstelltAm?: Date;
+  ErstelltAm?: string;
   ErstelltVon?: string;
-  GeaendertAm?: Date;
+  GeaendertAm?: string;
   GeaendertVon?: string;
   Zusatzfelder?: any;
 }
