@@ -38,7 +38,7 @@ Zusätzliche wird das `PxRestApiModule` geladen und importiert.
 ```ts
 // Root Module (src/app.module.ts)
 
-import { RestApiModule, Configuration } from '@proffix/restapi-angular-library';
+import { PxRestApiModule, Configuration } from '@proffix/restapi-angular-library';
 
 // ...
 imports: [ PxRestApiModule ],
@@ -73,13 +73,13 @@ import { Login, LoginService, Configuration } from '@proffix/restapi-angular-lib
 
 // ...
 constructor(private loginService: LoginService, private configuration: Configuration) {
-  this.login: Login =  {
+  let login: Login =  {
     Benutzer: "pxuser",
     Passwort: "d3612ab62...",
     Datenbank: { Name: "PXDB" },
-    Module: configuration.getRequiredLicencedModulesAsStringArray() // Die Module können aus der AppConfiguration gelesen werden
+    Module: this.configuration.getRequiredLicencedModulesAsStringArray() // Die Module können aus der AppConfiguration gelesen werden
   }
-  loginService.doLogin(this.login).subscribe( // nur zu Anschauungszwecken, nie HTTP-Requests in einem Konstruktor absetzen
+  this.loginService.doLogin(login).subscribe( // nur zu Anschauungszwecken, nie HTTP-Requests in einem Konstruktor absetzen
       login => console.log("Login successed: " + login.Benutzer),
       error => console.log("Login failed")
     );

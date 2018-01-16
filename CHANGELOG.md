@@ -1,3 +1,7 @@
+1.0.4 (16.01.2018)
+------------------
+- Verbesserungen am README
+
 1.0.3 (03.01.2018)
 ------------------
 - Korrigiert Date-Felder in den API-Models ([#3](https://github.com/PROFFIX-NET/restapi-angular-library/issues/3))
