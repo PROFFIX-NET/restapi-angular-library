@@ -36,9 +36,14 @@ export class PxLoginService implements PxRestApiServiceInterface {
    * Führt den Login aus, wenn kein Login-Objekt mitgegeben wird, werden die vom letzten Login gespeicherten Daten verwendet.
    * Wenn auch keine gespeicherten Daten vorhanden sind, werden allfällig gespeicherte AutoLogin-Daten verwendet.
    * @param login Login-Objekt falls kein Re- oder AutoLogin versucht wird
+   * @param activateAutoLogin Bei true wird bei erfolgreichem Login der Auto Login aktiviert (bei false wird nichts gemacht)
    */
-  public doLogin(login?: PxLogin): Observable<PxLogin> {
-    return this.authentificationService.doLogin(this.httpService, login);
+  public doLogin(login?: PxLogin, activateAutoLogin?: boolean): Observable<PxLogin> {
+    return this.authentificationService.doLogin(this.httpService, login).do(() => {
+      if (activateAutoLogin) {
+        this.activateAutoLogin(login);
+      }
+    });
   }
 
   /**
@@ -64,10 +69,11 @@ export class PxLoginService implements PxRestApiServiceInterface {
   }
 
   /**
-   * Observable für den LoginFailed-Stream, wird jedesmal gefeuert wenn der Login (und der automatische AutoLogin) fehlschlägt
+   * Observable des Login-Streams, wird jedesmal gefeuert wenn der Login (und der automatische AutoLogin) statt findet oder fehlschlägt
+   * Bei erfolgreichem Login, befindet sich darin das PxLogin-Objekt, wenn der Login fehlschlägt wird ein Error geworfen
    */
-  public get loginFailedObservable(): Observable<void> {
-    return this.authentificationService.loginFailedObservable;
+  public get loginObservable(): Observable<PxLogin> {
+    return this.authentificationService.loginObservable;
   }
 
 }

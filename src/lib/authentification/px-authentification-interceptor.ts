@@ -36,8 +36,8 @@ export class PxAuthentificationInterceptor implements PxResponseInterceptor {
           if (res.status === 401) {
 
             // Bei 401 wird ein Re- oder Auto-Login versucht
-            return this.loginService.doLogin(httpService).catch(() => {
-              this.loginService.fireLoginFailed();
+            return this.loginService.doLogin(httpService).catch((error) => {
+              this.loginService.fireLoginError(error);
               return Observable.throw(res); // Wenn der automatische Login fehlschlägt, Observable weiterwerfen
             });
           } else {

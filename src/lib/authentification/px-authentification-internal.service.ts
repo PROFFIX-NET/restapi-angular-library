@@ -11,6 +11,8 @@ import { PxHttpService } from "../http/px-http.service";
 import { PxLocalStorageService } from "../local-storage/px-local-storage.service";
 import { PxLogin } from "../api-modules/pro/login/px-login.model";
 import { PxConfiguration } from "../configuration/px-configuration";
+import { PxError } from "../public_api";
+import { log } from "util";
 
 /**
  * INTERNER SERVICE, DARF NICHT VERWENDET WERDEN!!! Alle Zugriffe müssen über den LoginService (/api-modules/pro/login) erfolgen!
@@ -28,7 +30,7 @@ export class PxAuthentificationInternalService {
 
   private login: PxLogin = null;
   private autoLogin: PxLogin = null;
-  private loginFailedSubject: Subject<void> = new Subject<void>();
+  private loginSubject: Subject<PxLogin> = new Subject<PxLogin>();
 
   public constructor(
     private configuration: PxConfiguration,
@@ -38,17 +40,26 @@ export class PxAuthentificationInternalService {
   }
 
   /**
-   * Observable des LoginFailed-Streams, wird jedesmal gefeuert wenn der Login (und der automatische AutoLogin) fehlschlägt
+   * Observable des Login-Streams, wird jedesmal gefeuert wenn der Login (und der automatische AutoLogin) statt findet oder fehlschlägt
+   * Bei erfolgreichem Login, befindet sich darin das PxLogin-Objekt, wenn der Login fehlschlägt wird ein Error geworfen
    */
-  public get loginFailedObservable(): Observable<void> {
-    return this.loginFailedSubject.asObservable();
+  public get loginObservable(): Observable<PxLogin> {
+    return this.loginSubject.asObservable();
   }
 
   /**
-   * Feuert einen Event in den LoginFailed-Stream
+   * Feuert einen Event in den Login-Stream
+   * @param login Login-Objekt vom erfolgreichen Login oder null bei einem Logout
    */
-  public fireLoginFailed(): void {
-    this.loginFailedSubject.next(null);
+  public fireLoginSuccessful(login: PxLogin) {
+    this.loginSubject.next(login);
+  }
+
+  /**
+   * Feuert einen Error-Event in den Login-Stream
+   */
+  public fireLoginError(error?: PxError): void {
+    this.loginSubject.error(error);
   }
 
   /**
@@ -94,6 +105,7 @@ export class PxAuthentificationInternalService {
     if (!login) {
       login = this.login || this.autoLogin;
       if (!login) {
+        this.fireLoginError();
         return Observable.throw(null); // Kein Login gefunden, daher Fehler werfen
       }
     }
@@ -103,9 +115,11 @@ export class PxAuthentificationInternalService {
 
     // Login ausführen
     return httpService.post(PxAuthentificationInternalService.endpoint, login)
+      .do(null, error => this.fireLoginError(error))
       .flatMap((location: string) => httpService.get<PxLogin>(location)).do((newLogin: PxLogin) => {
         newLogin.Passwort = login.Passwort; // Passwort wird von der REST API entfernt, muss wieder eingefügt werden für AutoLogin
         this.login = newLogin; // Neuer Login im Login-Service speichern (für AutoLogin)
+        this.fireLoginSuccessful(newLogin);
       });
   }
 
@@ -116,6 +130,7 @@ export class PxAuthentificationInternalService {
   public doLogout(httpService: PxHttpService): Observable<void> {
     return httpService.delete(PxAuthentificationInternalService.endpoint)
       .finally(() => {
+        this.fireLoginSuccessful(null);
         this.login = null;
       });
   }
