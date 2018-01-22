@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 
 import {
-  ConnectionSettings,
-  ConnectionSettingsService,
-  Info,
-  InfoService,
-  Login,
-  LoginService,
-  Stundeninfo,
-  StundeninfoService
-} from "@proffix/restapi-angular-library";
+  PxConnectionSettings,
+  PxConnectionSettingsService,
+  PxInfo,
+  PxInfoService,
+  PxLogin,
+  PxLoginService,
+  PxStundeninfo,
+  PxStundeninfoService
+} from "../lib/public_api";
 import { AppConfiguration } from './app.configuration';
 
 @Component({
@@ -19,14 +19,14 @@ import { AppConfiguration } from './app.configuration';
 export class AppComponent implements OnInit {
   output = "";
 
-  private login: Login;
+  private login: PxLogin;
 
   constructor(
     private appConfiguration: AppConfiguration,
-    private connectionSettingsService: ConnectionSettingsService,
-    private infoService: InfoService,
-    private loginService: LoginService,
-    private stundeninfoService: StundeninfoService
+    private connectionSettingsService: PxConnectionSettingsService,
+    private infoService: PxInfoService,
+    private loginService: PxLoginService,
+    private stundeninfoService: PxStundeninfoService
   ) {
     this.connectionSettingsService.current = {
       WebserviceUrl: "https://remote.proffix.net:11011/pxapi/v2",

@@ -19,15 +19,15 @@ Es muss eine von `Configuration` vererbte Klasse erstellt werden, in der die bei
 
 ```ts
 import { Injectable } from '@angular/core';
-import { Configuration, Module, Version } from '@proffix/restapi-angular-library';
+import { PxConfiguration, PxModule, PxVersion } from '@proffix/restapi-angular-library';
 
 @Injectable()
-export class AppConfiguration extends Configuration {
-  public get requiredWebserviceVersion(): Version {
+export class AppConfiguration extends PxConfiguration {
+  public get requiredWebserviceVersion(): PxVersion {
     return { Major: 2, Minor: 2, Patch: 0 };
   }
-  public get requiredLicencedModules(): Module[] {
-    return [ Module.ZEI, Module.ADR ];
+  public get requiredLicencedModules(): PxModule[] {
+    return [ PxModule.ZEI, PxModule.ADR ];
   }
 }
 ```
@@ -38,13 +38,13 @@ Zusätzliche wird das `PxRestApiModule` geladen und importiert.
 ```ts
 // Root Module (src/app.module.ts)
 
-import { PxRestApiModule, Configuration } from '@proffix/restapi-angular-library';
+import { PxRestApiModule, PxConfiguration } from '@proffix/restapi-angular-library';
 
 // ...
 imports: [ PxRestApiModule ],
 providers: [
   AppConfiguration,
-  { provide: Configuration, useExisting: AppConfiguration }
+  { provide: PxConfiguration, useExisting: AppConfiguration }
 ],
 // ...
 ```
@@ -54,11 +54,12 @@ Die Verbindungseinstellungen (Klasse `ConnectionSettings`) werden durch den `Con
 
 ```ts
 // Angular Component
-import { ConnectionSettings, ConnectionSettingsService } from '@proffix/restapi-angular-library';
+
+import { PxConnectionSettings, PxConnectionSettingsService } from '@proffix/restapi-angular-library';
 
 // ...
-constructor(private connectionSettingsService: ConnectionSettingsService) {
-  let connectionSettings: ConnectionSettings =  { WebserviceUrl: "https://restapi.company.invalid", WebservicePasswortHash: "d3612ab62..."}
+constructor(private connectionSettingsService: PxConnectionSettingsService) {
+  let connectionSettings: PxConnectionSettings =  { WebserviceUrl: "https://restapi.company.invalid", WebservicePasswortHash: "d3612ab62..."}
   connectionSettingsService.current = connectionSettings;
 }
 ```
@@ -69,11 +70,12 @@ Der Login kann durchgeführt werden, wenn gültige Verbindungseinstellungen hint
 
 ```ts
 // Angular Component
-import { Login, LoginService, Configuration } from '@proffix/restapi-angular-library';
+
+import { PxLogin, PxLoginService, PxConfiguration } from '@proffix/restapi-angular-library';
 
 // ...
-constructor(private loginService: LoginService, private configuration: Configuration) {
-  let login: Login =  {
+constructor(private loginService: PxLoginService, private configuration: PxConfiguration) {
+  let login: PxLogin =  {
     Benutzer: "pxuser",
     Passwort: "d3612ab62...",
     Datenbank: { Name: "PXDB" },

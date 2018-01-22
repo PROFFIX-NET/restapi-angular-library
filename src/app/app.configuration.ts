@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Configuration, Module, Version } from '@proffix/restapi-angular-library';
+import { PxConfiguration, PxModule, PxVersion } from '../lib/public_api';
 
 @Injectable()
-export class AppConfiguration extends Configuration {
-  public get requiredWebserviceVersion(): Version {
+export class AppConfiguration extends PxConfiguration {
+  public get requiredWebserviceVersion(): PxVersion {
     return { Major: 2, Minor: 0, Patch: 0 };
   }
-  public get requiredLicencedModules(): Module[] {
-    return [Module.ZEI];
+  public get requiredLicencedModules(): PxModule[] {
+    return [PxModule.ZEI];
   }
 }

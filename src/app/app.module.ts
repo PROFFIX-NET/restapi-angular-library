@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { AppConfiguration } from './app.configuration';
-import { PxRestApiModule, Configuration, StundeninfoService } from '@proffix/restapi-angular-library';
+import { PxRestApiModule, PxConfiguration, PxStundeninfoService } from '../lib/public_api';
 
 @NgModule({
   declarations: [
@@ -11,12 +11,12 @@ import { PxRestApiModule, Configuration, StundeninfoService } from '@proffix/res
   ],
   imports: [
     BrowserModule,
-    PxRestApiModule
+    PxRestApiModule.forRoot()
   ],
   providers: [
     AppConfiguration,
-    { provide: Configuration, useExisting: AppConfiguration },
-    StundeninfoService
+    { provide: PxConfiguration, useExisting: AppConfiguration },
+    PxStundeninfoService
   ],
   bootstrap: [AppComponent]
 })
