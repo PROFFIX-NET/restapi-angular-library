@@ -30,7 +30,7 @@ export class PxMitarbeiterService implements PxGettableAllServiceInterface<PxMit
    * @param mitarbeiterNr Mitarbeiter-Nr welche abgerufen wird
    * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
    */
-  public get(mitarbeiterNr: string, params?: PxGlobalQueryParameter): Observable<PxMitarbeiter> {
+  public get(mitarbeiterNr: number, params?: PxGlobalQueryParameter): Observable<PxMitarbeiter> {
     return this.httpService.get<PxMitarbeiter>(this.endpoint + "/" + mitarbeiterNr, params);
   }
 }

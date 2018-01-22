@@ -57,7 +57,6 @@ export class PxHttpService {
    * @param options Request Options
    */
   public request(method: RequestMethod, endpoint: string, options?: RequestOptionsArgs): Observable<Response> {
-    console.log("HTTP Request: " + RequestMethod[method] + " " + endpoint);
 
     // RequestOptions setzen und mit allfällig übergebenen RequestOptions zusammenführen
     options = new RequestOptions({
