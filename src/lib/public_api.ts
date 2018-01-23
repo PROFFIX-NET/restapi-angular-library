@@ -14,6 +14,15 @@ export * from './api-modules/adr/notizart/px-notizart.service';
 export * from './api-modules/adr/zahlungsart/px-zahlungsart.model';
 export * from './api-modules/adr/zahlungsart/px-zahlungsart.service';
 
+// api-modules/base-interfaces
+export * from './api-modules/base-interfaces/px-deletable-service-interface';
+export * from './api-modules/base-interfaces/px-gettable-all-service-interface';
+export * from './api-modules/base-interfaces/px-gettable-by-id-service-interface';
+export * from './api-modules/base-interfaces/px-postable-service-interface';
+export * from './api-modules/base-interfaces/px-puttable-service-interface';
+export * from './api-modules/base-interfaces/px-rest-api-model-interface';
+export * from './api-modules/base-interfaces/px-rest-api-service-interface';
+
 // api-modules/fib
 export * from './api-modules/fib/buchung/px-betrag.model';
 export * from './api-modules/fib/buchung/px-buchung.model';
