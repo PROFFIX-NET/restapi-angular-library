@@ -1,3 +1,7 @@
+2.0.1 (23.01.2018)
+------------------
+- Base Interfaces der API Module veröffentlicht
+
 2.0.0 (23.01.2018)
 ==================
 - ***Breaking Change***: Alle Namen von exportieren Elementen (Klassen, Interfaces, Konstanten, usw.) beginnen nun mit Px ([#4](https://github.com/PROFFIX-NET/restapi-angular-library/issues/4))
