@@ -15,8 +15,7 @@ import { PxRestApiModule, PxConfiguration, PxStundeninfoService } from '../lib/p
   ],
   providers: [
     AppConfiguration,
-    { provide: PxConfiguration, useExisting: AppConfiguration },
-    PxStundeninfoService
+    { provide: PxConfiguration, useExisting: AppConfiguration }
   ],
   bootstrap: [AppComponent]
 })

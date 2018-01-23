@@ -33,7 +33,7 @@ export class AppConfiguration extends PxConfiguration {
 ```
 
 Die `AppConfiguration` muss *Injectable* sein, da sie dem dem Dependency Injector als `Configuration` für die Library mitgegeben werden muss.
-Zusätzliche wird das `PxRestApiModule` geladen und importiert.
+Zusätzliche wird das `PxRestApiModule` geladen und über `PxRestApiModule.forRoot()` importiert.
 
 ```ts
 // Root Module (src/app.module.ts)
@@ -41,7 +41,7 @@ Zusätzliche wird das `PxRestApiModule` geladen und importiert.
 import { PxRestApiModule, PxConfiguration } from '@proffix/restapi-angular-library';
 
 // ...
-imports: [ PxRestApiModule ],
+imports: [ PxRestApiModule.forRoot() ],
 providers: [
   AppConfiguration,
   { provide: PxConfiguration, useExisting: AppConfiguration }
