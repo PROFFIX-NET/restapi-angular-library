@@ -38,6 +38,7 @@ export * from './api-modules/fib/kostenart/px-kostenart.model';
 export * from './api-modules/fib/kostenart/px-kostenart.service';
 export * from './api-modules/fib/kostenstelle/px-kostenstelle.model';
 export * from './api-modules/fib/kostenstelle/px-kostenstelle.service';
+export * from "./api-modules/fib/px-ja-nein-darf.enum";
 
 // api-modules/lag
 export * from './api-modules/lag/artikel/px-artikel.model';

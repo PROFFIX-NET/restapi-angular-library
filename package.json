@@ -1,6 +1,6 @@
 {
   "name": "@proffix/restapi-angular-library-container",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "author": "PROFFIX Software AG <info@proffix.net> (http://www.proffix.net)",
   "license": "Apache-2.0",
   "description": "Programmbibliothek für die einfache Verwendung der PROFFIX REST API in Angular Applikationen",
