@@ -139,6 +139,7 @@ export * from './local-storage/px-local-storage.service';
 // utils
 export * from './utils/px-hash';
 export * from './utils/px-uuid';
+export * from './utils/px-date-formatter';
 
 // .
 export * from "./px-rest-api.module";
