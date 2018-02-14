@@ -1,3 +1,16 @@
+2.0.4 (07.02.2018)
+------------------
+- Bugfix bezüglich PxDateFormatter (momentjs) standard import funktioniert nicht mit npm-packagr.
+
+2.0.3 (07.02.2018)
+------------------
+- PxDateFormatter erstellt. Dieser beinhaltet die Funktionalität für das Formatieren von
+  Standard Datumszeichenfolgen oder Date Objekten zu PROFFIX Datumszeichenfolge.
+
+2.0.2 (07.02.2018)
+------------------
+- PxKonto Modell fehlende Eigenschaften erweitert.
+
 2.0.1 (23.01.2018)
 ------------------
 - Base Interfaces der API Module veröffentlicht

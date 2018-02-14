@@ -3,6 +3,7 @@
   "src": "src/lib",
   "dest": "dist/lib",
   "lib": {
-    "entryFile": "public_api.ts"
+    "entryFile": "public_api.ts",
+    "embedded": ["moment"]
   }
 }
