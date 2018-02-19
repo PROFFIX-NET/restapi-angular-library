@@ -12,13 +12,13 @@ import { PxBuchung } from './px-buchung.model';
 import { PxBuchungFlat } from './px-buchung-flat.model';
 
 /**
- * Ruft die Buchungen aus FIB/Buchung ab
+ * Ruft die Buchungen aus DEB/Buchung ab
  */
 @Injectable()
 export class PxBuchungService implements PxGettableAllServiceInterface<PxBuchung>, PxGettableByIdServiceInterface<PxBuchung>,
   PxDeletableServiceInterface<PxBuchung>, PxPuttableServiceInterface<PxBuchung>, PxPostableServiceInterface<PxBuchung> {
 
-  public endpoint = "FIB/Buchung";
+  public endpoint = "DEB/Buchung";
 
   constructor(private httpService: PxHttpService) { }
 

@@ -1,13 +1,13 @@
 import { PxAuftrag } from "../../pro/auftrag/px-auftrag.model";
 import { PxBelegart } from "../../pro/belegart/px-belegart.model";
 import { PxBetrag } from "./px-betrag.model";
-import { PxKonto } from "../konto/px-konto.model";
+import { PxKonto } from "../../fib/konto/px-konto.model";
 import { PxWaehrung } from "../../pro/waehrung/px-waehrung.model";
 import { PxSteuercode } from "../../pro/steuercode/px-steuercode.model";
 import { PxZahlungsart } from "../../adr/zahlungsart/px-zahlungsart.model";
 
 /**
- * Model für Buchungszeilen in /FIB/Buchung
+ * Model für Buchungszeilen in /KRE/Buchung
  */
 export interface PxBuchungszeile {
   Auftrag?: PxAuftrag;

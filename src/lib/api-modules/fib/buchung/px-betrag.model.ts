@@ -10,8 +10,4 @@ export interface PxBetrag {
   Buchungstext?: string;
   Kostenart?: PxKostenart;
   Kostenstelle?: PxKostenstelle;
-  ErstelltAm?: string;
-  ErstelltVon?: string;
-  GeaendertAm?: string;
-  GeaendertVon?: string;
 }
