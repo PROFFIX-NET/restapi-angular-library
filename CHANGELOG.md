@@ -1,6 +1,6 @@
 2.0.4 (07.02.2018)
 ------------------
-- Bugfix bezüglich PxDateFormatter (momentjs) standard import funktioniert nicht mit npm-packagr.
+- Neue Endpunkte integriert BuchungFlat unter FIB, DEB, KRE.
 
 2.0.3 (07.02.2018)
 ------------------

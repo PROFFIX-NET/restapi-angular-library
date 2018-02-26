@@ -1,4 +1,10 @@
 /**
+ * TODO Bastel! Wird für Moment JS aktuell benötigt.
+ * Vielleicht gehts in Zukunft schöner.
+*/
+declare var require: any;
+
+/**
  * Formathelfer für die Datumsformatierung
 */
 export class PxDateFormatter {
