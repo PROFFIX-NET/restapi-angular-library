@@ -1,3 +1,6 @@
+2.0.5 (?)
+- PxBuchungsart Modell korrigiert (HabenKonto)
+
 2.0.4 (07.02.2018)
 ------------------
 - Neue Endpunkte integriert BuchungFlat unter FIB, DEB, KRE.
