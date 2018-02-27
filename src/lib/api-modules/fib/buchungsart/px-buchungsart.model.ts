@@ -27,7 +27,7 @@ export interface PxBuchungsart extends PxRestApiModelInterface {
   SteuerRueckbuchung?: boolean;
   UmsatzBuchung?: boolean;
   BuchungsartenKonten?: {
-    Habenkonto?: PxKonto;
+    HabenKonto?: PxKonto;
     SollKonto?: PxKonto;
     Hauptkonto?: boolean;
     ErstelltAm?: string;
