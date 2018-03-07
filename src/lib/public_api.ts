@@ -22,6 +22,8 @@ export * from './api-modules/base-interfaces/px-postable-service-interface';
 export * from './api-modules/base-interfaces/px-puttable-service-interface';
 export * from './api-modules/base-interfaces/px-rest-api-model-interface';
 export * from './api-modules/base-interfaces/px-rest-api-service-interface';
+export * from './api-modules/base-interfaces/px-gettable-all-flat-service-interface';
+export * from './api-modules/base-interfaces/px-gettable-by-id-flat-service-interface';
 
 // api-modules/fib
 export * from './api-modules/fib/buchung/px-betrag.model';

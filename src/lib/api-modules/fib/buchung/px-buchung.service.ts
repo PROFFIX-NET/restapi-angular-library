@@ -10,13 +10,15 @@ import { PxPuttableServiceInterface } from "../../base-interfaces/px-puttable-se
 import { PxDeletableServiceInterface } from "../../base-interfaces/px-deletable-service-interface";
 import { PxBuchung } from './px-buchung.model';
 import { PxBuchungFlat } from './px-buchung-flat.model';
+import { PxGettableByIdFlatServiceInterface, PxGettableAllFlatServiceInterface } from '../../../public_api';
 
 /**
  * Ruft die Buchungen aus FIB/Buchung ab
  */
 @Injectable()
 export class PxBuchungService implements PxGettableAllServiceInterface<PxBuchung>, PxGettableByIdServiceInterface<PxBuchung>,
-  PxDeletableServiceInterface<PxBuchung>, PxPuttableServiceInterface<PxBuchung>, PxPostableServiceInterface<PxBuchung> {
+  PxDeletableServiceInterface<PxBuchung>, PxPuttableServiceInterface<PxBuchung>, PxPostableServiceInterface<PxBuchung>,
+  PxGettableByIdFlatServiceInterface<PxBuchungFlat>, PxGettableAllFlatServiceInterface<PxBuchungFlat> {
 
   public endpoint = "FIB/Buchung";
 
