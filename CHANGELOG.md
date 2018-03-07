@@ -1,4 +1,9 @@
-2.0.5 (?)
+2.0.6 (07.03.2018)
+------------------
+- base interfaces für flat modelle implementiert.
+
+2.0.5 (26.02.2018)
+------------------
 - PxBuchungsart Modell korrigiert (HabenKonto)
 
 2.0.4 (07.02.2018)
