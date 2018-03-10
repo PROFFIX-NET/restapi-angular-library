@@ -1,3 +1,7 @@
+2.0.7 
+------------------
+- PxDateFormatter auf 24h Format umgestellt.
+
 2.0.6 (07.03.2018)
 ------------------
 - base interfaces für flat modelle implementiert.
