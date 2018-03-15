@@ -1,6 +1,7 @@
 2.0.7 
 ------------------
 - PxDateFormatter auf 24h Format umgestellt.
+- Neuer Endpunkt integriert Kurs aktualisierung.
 
 2.0.6 (07.03.2018)
 ------------------
