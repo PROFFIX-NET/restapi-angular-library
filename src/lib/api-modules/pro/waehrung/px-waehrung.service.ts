@@ -33,4 +33,11 @@ export class PxWaehrungService implements PxGettableAllServiceInterface<PxWaehru
   public get(waehrungNr: string, params?: PxGlobalQueryParameter): Observable<PxWaehrung> {
     return this.httpService.get<PxWaehrung>(this.endpoint + "/" + waehrungNr, params);
   }
+
+  /**
+   * Startet die Kursaktualisierung.
+   */
+  public postKurseAktualisieren(): Observable<void> {
+    return this.httpService.post(this.endpoint + "/kurseaktualisieren", null).map(x => undefined);
+  }
 }
