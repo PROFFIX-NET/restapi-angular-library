@@ -25,8 +25,6 @@ export class PxInfoService implements PxRestApiServiceInterface {
 
   /**
    * Ruft Informationen zum Webservice ab
-   *
-   * @returns {Observable<PxInfo>}
    */
   public getInfo(): Observable<PxInfo> {
     return this.httpService.get<PxInfo>(this.endpoint, {

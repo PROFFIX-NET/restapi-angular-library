@@ -23,8 +23,8 @@ export class PxInvalidFieldsInterceptor implements PxResponseInterceptor {
   /**
    * Fängt alle Errors ab und prüft ob es sich um einen Feld-Fehler handelt, wenn ja,
    * wird er in den InvalidFieldsError-Stream weitergeleitet
-   * @param {PxHttpService} httpService HTTP-Service zum verarbeiten (kann nicht injected werden), wird hier nicht benötigt
-   * @param {Observable<Response>} observable HTTP-Response-Stream
+   * @param httpService HTTP-Service zum verarbeiten (kann nicht injected werden), wird hier nicht benötigt
+   * @param observable HTTP-Response-Stream
    */
   public processResponse(httpService: PxHttpService, observable: Observable<Response>): Observable<Response> {
     return observable.catch((error: PxError) => {

@@ -30,7 +30,6 @@ export class PxEinheitsmatrixService implements PxGettableAllServiceInterface<Px
    * @param einheitLager Lagereinheit-Nr
    * @param einheitRechnung Rechnungseinheit-Nr
    * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
-   * @returns {Observable<PxEinheitsmatrix>}
    */
   public get(einheitLager: string, einheitRechnung: string, params?: PxGlobalQueryParameter): Observable<PxEinheitsmatrix> {
     return this.httpService.get<PxEinheitsmatrix>(this.endpoint + "/" + einheitLager + "/" + einheitRechnung, params);

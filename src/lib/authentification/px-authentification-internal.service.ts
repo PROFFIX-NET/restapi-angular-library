@@ -19,8 +19,6 @@ import { log } from "util";
  * Der interne Authentifizierungsservice musse erstellt werden, da wir sonst eine zirkuläre Abhängigkeit hätten, der HTTP-Service
  * verwendet diesen Service statt den Login-Service, dadurch kann im Login-Service der HTTP-Service injected werden.
  *
- * @export
- * @class AuthentificationInternalService
  */
 @Injectable()
 export class PxAuthentificationInternalService {

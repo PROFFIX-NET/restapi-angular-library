@@ -16,7 +16,7 @@ export class PxLocalStorageService {
   /**
    * Gibt das Objekt mit dem angegebenen Schlüssel aus dem LocalStorage zurück
    * @param T Typ in den das Objekt gemappt wird
-   * @param {string} key Schlüssl unter dem das Objekt abgelegt ist
+   * @param key Schlüssl unter dem das Objekt abgelegt ist
    */
   public get<T>(key: string): T {
     return JSON.parse(window.localStorage.getItem(key)) as T;
