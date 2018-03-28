@@ -1,3 +1,7 @@
+2.0.9 (28.03.2018)
+------------------
+- Neuer Endpunkt für Konto saldo implementiert.
+
 2.0.8 (28.03.2018)
 ------------------
 - Steuercode Modell mit GueltigVon, GueltigBis Eigenschaft erweitert.
