@@ -1,6 +1,6 @@
 {
   "name": "@proffix/restapi-angular-library-container",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "author": "PROFFIX Software AG <info@proffix.net> (http://www.proffix.net)",
   "license": "Apache-2.0",
   "description": "Programmbibliothek für die einfache Verwendung der PROFFIX REST API in Angular Applikationen",
@@ -41,7 +41,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~9.6.0",
     "codelyzer": "~4.2.1",
-    "copyfiles": "~2.0.0",
+    "copyfiles": "^1.2.0",
     "jasmine-core": "~3.1.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~2.0.0",

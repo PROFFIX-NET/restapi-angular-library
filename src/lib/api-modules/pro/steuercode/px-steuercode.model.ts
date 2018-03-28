@@ -10,6 +10,8 @@ export interface PxSteuercode extends PxRestApiModelInterface {
   Prozent?: number;
   InklusivMWST?: boolean;
   Konto?: PxKonto;
+  GueltigVon?: string;
+  GueltigBis?: string;
   ErstelltAm?: string;
   ErstelltVon?: string;
   GeaendertAm?: string;
