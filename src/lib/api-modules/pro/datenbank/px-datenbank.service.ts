@@ -19,10 +19,16 @@ export class PxDatenbankService {
 
   /**
    * Ruft alle Datenbanken ab
+   *
+   * @param additionalUrlParams Zusätzliche Parameter welche dem Aufruf mitgegeben werden können (optional)
    */
-  public getAll(): Observable<PxDatenbank[]> {
-    return this.httpService.get<PxDatenbank[]>(this.endpoint, {
+  public getAll(additionalUrlParams?: { [name: string]: string }): Observable<PxDatenbank[]> {
+    let paramsObj: { [name: string]: string } = {
       "key": this.connectionSettingsService.current.WebservicePasswortHash
-    });
+    };
+    if (additionalUrlParams) {
+      paramsObj = { ...paramsObj, ...additionalUrlParams };
+    }
+    return this.httpService.get<PxDatenbank[]>(this.endpoint, paramsObj);
   }
 }
