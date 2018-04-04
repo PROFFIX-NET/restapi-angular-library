@@ -21,6 +21,9 @@ export class PxDateFormatter {
      * Vielleicht gehts in Zukunft schöner.
      */
     const moment = require('moment');
-    return moment.utc(date).format("YYYY-MM-DD HH:mm:ss");
+    if (typeof  date === 'string') {
+      date = new Date(date);
+    }
+    return moment.utc(date.toISOString()).format('YYYY-MM-DD HH:mm:ss');
   }
 }

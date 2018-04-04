@@ -1,3 +1,11 @@
+2.0.11 ()
+------------------
+- fix moment js warning im px-date-formatter
+
+2.0.10 (03.04.2018)
+------------------
+- Optionale URL-Parameter bei PRO/Datenbank implementiert.
+
 2.0.9 (28.03.2018)
 ------------------
 - Neuer Endpunkt für Konto saldo implementiert.
