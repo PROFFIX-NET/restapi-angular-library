@@ -1,6 +1,7 @@
 2.0.11 ()
 ------------------
 - fix moment js warning im px-date-formatter
+- px-date-formatter string handling überarbeitet.
 
 2.0.10 (03.04.2018)
 ------------------

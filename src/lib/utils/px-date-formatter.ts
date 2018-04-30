@@ -11,7 +11,7 @@ export class PxDateFormatter {
   /**
    * Funktion für die PROFFIX Datumsstring Formatierung.
    */
-  public static toPxDateString(date: Date|string): string {
+  public static toPxDateString(date: Date | string): string {
     /**
      * TODO Bastel! Aktuell nicht anders moglich da immer die warning
      * Compiling to FESM15
@@ -21,8 +21,17 @@ export class PxDateFormatter {
      * Vielleicht gehts in Zukunft schöner.
      */
     const moment = require('moment');
-    if (typeof  date === 'string') {
-      date = new Date(date);
+    if (typeof date === 'string') {
+      if (moment.utc(date, "L", true).isValid()) {
+        // Der Input ist im lokalen Datumsformat.
+        date = moment.utc(date, "L", true).toDate() as Date;
+      } else if (moment.utc(date, moment.ISO_8601, true).isValid()) {
+        // Der Input ist im ISO_8601 Datumsformat.
+        date = moment.utc(date, moment.ISO_8601, true).toDate() as Date;
+      } else {
+        throw new Error('Die Konvertierung konnte nicht durchgeführt werden da das übergebene Format nicht unterstützt wird.' +
+          'Input: ' + date);
+      }
     }
     return moment.utc(date.toISOString()).format('YYYY-MM-DD HH:mm:ss');
   }
