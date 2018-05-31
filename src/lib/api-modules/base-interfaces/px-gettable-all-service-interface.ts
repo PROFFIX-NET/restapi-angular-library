@@ -1,4 +1,4 @@
-import { Observable } from "rxjs/Observable";
+import { Observable } from "rxjs";
 import { PxRestApiServiceInterface } from "./px-rest-api-service-interface";
 import { PxGlobalQueryParameter } from "../../http/px-global-query-parameter";
 

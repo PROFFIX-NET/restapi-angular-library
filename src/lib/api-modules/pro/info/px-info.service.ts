@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import 'rxjs/add/operator/map';
+import { Observable } from "rxjs";
+import { map } from 'rxjs/operators';
+
 
 import { PxHttpService } from '../../../http/px-http.service';
 import { PxRestApiServiceInterface } from '../../base-interfaces/px-rest-api-service-interface';
@@ -36,7 +37,7 @@ export class PxInfoService implements PxRestApiServiceInterface {
    * Prüft ob die in der Konfiguration angegebene Version mit dem Webservice kompatibel ist
    */
   public isAppCompatible(): Observable<boolean> {
-    return this.getInfo().map((info: PxInfo) => this.isVersionCompatible(this.parseVersion(info.Version)));
+    return this.getInfo().pipe(map((info: PxInfo) => this.isVersionCompatible(this.parseVersion(info.Version))));
   }
 
   /**

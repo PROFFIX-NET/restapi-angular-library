@@ -1,10 +1,11 @@
 import { Injectable, Inject } from "@angular/core";
 import { HttpClient, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Observable } from "rxjs/Observable";
-import 'rxjs/add/operator/map';
+import { Observable } from "rxjs";
+
 
 import { PxConnectionSettingsService } from '../connection-settings/px-connection-settings.service';
 import { PxUrlFormatter } from "../utils/px-url-formatter";
+import { map } from "rxjs/operators";
 
 /**
  * HTTP Server welcher die Verbindung zur REST API sicherstellt.
@@ -46,10 +47,10 @@ export class PxHttpService {
   public post(endpoint: string, body: any, params?: Object): Observable<string> {
     const option = this.createRequestOption(params);
     return this.http.post<HttpResponse<any>>(this.getAbsolutUrl(endpoint),
-      JSON.stringify(body), { headers: option.headers, params: option.params, observe: 'response' })
-      .map(response => {
-        return response.headers.get("Location");
-      });
+      JSON.stringify(body), { headers: option.headers, params: option.params, observe: 'response' }).pipe(
+        map(response => {
+          return response.headers.get("Location");
+        }));
   }
 
   /**

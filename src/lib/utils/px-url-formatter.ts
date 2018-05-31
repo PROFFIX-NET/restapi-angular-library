@@ -3,7 +3,9 @@ import { PxConnectionSettingsService } from "../connection-settings/px-connectio
 /**
  * Hilfsklasse für die URL Formattierung.
  */
-export  class PxUrlFormatter {
+
+// @dynamic
+export class PxUrlFormatter {
 
   /**
    * Erstellt die komplette URL für einen Endpunkt
@@ -32,7 +34,7 @@ export  class PxUrlFormatter {
    * @param str String der getrimmt wird
    * @param separator Zeichen die getrimmt werden
    */
-  private static trimStart(str: string, separator: string): string {
+  public static trimStart(str: string, separator: string): string {
     if (str && separator) {
       while (str.startsWith(separator)) {
         str = str.substr(separator.length);
@@ -46,7 +48,7 @@ export  class PxUrlFormatter {
    * @param str String der getrimmt wird
    * @param separator Zeichen die getrimmt werden
    */
-  private static trimEnd(str: string, separator: string): string {
+  public static trimEnd(str: string, separator: string): string {
     if (str && separator) {
       while (str.endsWith(separator)) {
         str = str.substr(0, str.length - separator.length);
@@ -61,7 +63,7 @@ export  class PxUrlFormatter {
    * @param str String der getrimmt wird
    * @param separator Zeichen die getrimmt werden
    */
-  private static trim(str: string, separator: string): string {
+  public static trim(str: string, separator: string): string {
     return this.trimEnd(this.trimStart(str, separator), separator);
   }
 }

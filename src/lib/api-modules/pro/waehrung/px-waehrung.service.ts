@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { PxGettableAllServiceInterface } from '../../base-interfaces/px-gettable-all-service-interface';
 import { PxGettableByIdServiceInterface } from '../../base-interfaces/px-gettable-by-id-service-interface';
 import { PxHttpService } from '../../../http/px-http.service';
 import { PxGlobalQueryParameter } from '../../../http/px-global-query-parameter';
 import { PxWaehrung } from './px-waehrung.model';
+import { map } from 'rxjs/operators';
 
 /**
  * Ruft die Währungen aus PRO/Waehrung ab
@@ -38,6 +39,6 @@ export class PxWaehrungService implements PxGettableAllServiceInterface<PxWaehru
    * Startet die Kursaktualisierung.
    */
   public postKurseAktualisieren(): Observable<void> {
-    return this.httpService.post(this.endpoint + "/kurseaktualisieren", null).map(x => undefined);
+    return this.httpService.post(this.endpoint + "/kurseaktualisieren", null).pipe(map(x => undefined));
   }
 }

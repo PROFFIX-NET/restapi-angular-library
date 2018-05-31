@@ -1,3 +1,5 @@
+
+import {throwError as observableThrowError,  Observable ,  BehaviorSubject } from 'rxjs';
 import { Injectable } from "@angular/core";
 import {
   HttpInterceptor,
@@ -12,19 +14,17 @@ import {
   HttpErrorResponse
 } from "@angular/common/http";
 
-import { Observable } from "rxjs/Observable";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/finally';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/do';
+
+
+
+
+
+
 
 import { debug } from "util";
 import { PxLoginService } from "../api-modules/pro/login/px-login.service";
+import { map, catchError, switchMap, finalize, filter, take } from 'rxjs/operators';
 
 /**
  * HTTP-Interceptor für das Session und Reauthorizaion Handling.
@@ -51,23 +51,23 @@ export class PxHttpInterceptor implements HttpInterceptor {
    */
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
-    return next.handle(this.addSessionId(req))
-      .map(response => {
+    return next.handle(this.addSessionId(req)).pipe(
+      map(response => {
         if (response instanceof HttpResponse) {
           this.retrieveSessionId(response);
         }
         return response;
-      })
-      .catch(error => {
+      }),
+      catchError(error => {
         if (error instanceof HttpErrorResponse) {
           switch (error.status) {
             case 401:
               return this.handle401Error(req, next);
           }
         } else {
-          return Observable.throw(error);
+          return observableThrowError(error);
         }
-      });
+      }));
   }
 
   /**
@@ -100,24 +100,24 @@ export class PxHttpInterceptor implements HttpInterceptor {
       // abgeschlossen ist dann werden diese ausgeführt.
       this.sessionIdSubject.next(null);
 
-      this.loginService.doLogin()
-        .switchMap(() => {
+      this.loginService.doLogin().pipe(
+        switchMap(() => {
           this.sessionIdSubject.next(this.sessionId);
           return next.handle(this.addSessionId(req));
-        })
-        .catch(error => {
-          return Observable.throw(error); // Wenn der automatische Login fehlschlägt, Observable weiterwerfen
-        })
-        .finally(() => {
+        }),
+        catchError(error => {
+          return observableThrowError(error); // Wenn der automatische Login fehlschlägt, Observable weiterwerfen
+        }),
+        finalize(() => {
           this.reAuthentication = false;
-        });
+        }));
     } else {
-      return this.sessionIdSubject
-        .filter(sessionId => sessionId != null)
-        .take(1)
-        .switchMap(sessionId => {
+      return this.sessionIdSubject.pipe(
+        filter(sessionId => sessionId != null),
+        take(1),
+        switchMap(sessionId => {
           return next.handle(this.addSessionId(req));
-        });
+        }));
     }
   }
 }

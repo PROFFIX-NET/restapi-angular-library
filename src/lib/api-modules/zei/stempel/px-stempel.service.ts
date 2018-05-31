@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { PxHttpService } from '../../../http/px-http.service';
 import { PxRestApiServiceInterface } from '../../base-interfaces/px-rest-api-service-interface';

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { PxGettableAllServiceInterface } from '../../base-interfaces/px-gettable-all-service-interface';
 import { PxHttpService } from '../../../http/px-http.service';

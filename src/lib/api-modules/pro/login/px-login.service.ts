@@ -1,11 +1,8 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs/Observable";
-import { Subject } from "rxjs/Subject";
-import "rxjs/add/operator/map";
-import "rxjs/add/operator/mergeMap";
-import "rxjs/add/operator/do";
-import "rxjs/add/operator/finally";
-import 'rxjs/add/observable/throw';
+import { throwError, Observable, Subject } from 'rxjs';
+import { tap, mergeMap, finalize } from 'rxjs/operators';
+
+
 
 import { PxHttpService } from '../../../http/px-http.service';
 import { PxRestApiServiceInterface } from '../../base-interfaces/px-rest-api-service-interface';
@@ -13,6 +10,7 @@ import { PxLogin } from './px-login.model';
 import { PxConfiguration } from "../../../configuration/px-configuration";
 import { PxLocalStorageService } from "../../../local-storage/px-local-storage.service";
 import { PxError } from "../../../error/px-error.model";
+
 
 /**
  * Login-Service zum ein- und ausloggen der Benutzer und Handling des AutoLogin.
@@ -80,9 +78,9 @@ export class PxLoginService implements PxRestApiServiceInterface {
     this.localStorageService.set(PxLoginService.localstorageKeyAutoLogin, login);
   }
 
-    /**
-   * Löscht und deaktiviert das AutoLogin
-   */
+  /**
+ * Löscht und deaktiviert das AutoLogin
+ */
   public removeAutoLogin() {
     this.localStorageService.remove(PxLoginService.localstorageKeyAutoLogin);
   }
@@ -94,12 +92,12 @@ export class PxLoginService implements PxRestApiServiceInterface {
    * @param activateAutoLogin Bei true wird bei erfolgreichem Login der Auto Login aktiviert (bei false wird nichts gemacht)
    */
   public doLogin(login?: PxLogin, activateAutoLogin?: boolean): Observable<PxLogin> {
-     // Falls kein Login-Objekt, zuletzt verwendeter Login- oder AutoLogin-Objekt verwenden
-     if (!login) {
+    // Falls kein Login-Objekt, zuletzt verwendeter Login- oder AutoLogin-Objekt verwenden
+    if (!login) {
       login = this.login || this.autoLogin;
       if (!login) {
         this.fireLoginError();
-        return Observable.throw(null); // Kein Login gefunden, daher Fehler werfen
+        return throwError(null); // Kein Login gefunden, daher Fehler werfen
       }
     }
 
@@ -107,27 +105,26 @@ export class PxLoginService implements PxRestApiServiceInterface {
     login.Module = this.configuration.getRequiredLicencedModulesAsStringArray();
 
     // Login ausführen
-    return this.httpService.post(this.endpoint, login)
-      .do(null, error => this.fireLoginError(error))
-      .flatMap((location: string) => this.httpService.get<PxLogin>(location)).do((newLogin: PxLogin) => {
+    return this.httpService.post(this.endpoint, login).pipe(
+      tap(null, error => this.fireLoginError(error)),
+      mergeMap((location: string) => this.httpService.get<PxLogin>(location)),
+      tap((newLogin: PxLogin) => {
         newLogin.Passwort = login.Passwort; // Passwort wird von der REST API entfernt, muss wieder eingefügt werden für AutoLogin
         this.login = newLogin; // Neuer Login im Login-Service speichern (für AutoLogin)
         this.fireLoginSuccessful(newLogin);
         if (activateAutoLogin) {
           this.activateAutoLogin(newLogin);
         }
-      });
-
+      }));
   }
 
   /**
    * Loggt den Benutzer aus (das AutoLogin wird nicht gelöscht)
    */
   public doLogout(): Observable<void> {
-    return this.httpService.delete(this.endpoint)
-      .finally(() => {
-        this.fireLoginSuccessful(null);
-        this.login = null;
-      });
+    return this.httpService.delete(this.endpoint).pipe(finalize(() => {
+      this.fireLoginSuccessful(null);
+      this.login = null;
+    }));
   }
 }

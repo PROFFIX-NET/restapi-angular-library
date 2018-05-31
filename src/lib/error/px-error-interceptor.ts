@@ -1,3 +1,5 @@
+
+import { throwError, Observable } from 'rxjs';
 import { Injectable } from "@angular/core";
 import {
   HttpInterceptor,
@@ -11,14 +13,12 @@ import {
   HttpHeaders,
   HttpErrorResponse
 } from "@angular/common/http";
-import { Observable } from "rxjs/Observable";
-import "rxjs/add/operator/catch";
-import 'rxjs/add/observable/throw';
 
 import { PxError } from "./px-error.model";
 import { PxUrlFormatter } from "../utils/px-url-formatter";
 import { PxConnectionSettingsService } from "../connection-settings/px-connection-settings.service";
 import { PxErrorService } from "./px-error.service";
+import { catchError } from 'rxjs/operators';
 
 
 /**
@@ -41,19 +41,18 @@ export class PxErrorInterceptor implements HttpInterceptor {
    */
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
-    return next.handle(req)
-      .catch(error => {
+    return next.handle(req).pipe(
+      catchError(error => {
         if (error instanceof HttpErrorResponse) {
           const pxError: PxError = error.error as PxError; // TODO Was passiert wenn kein Error-Model zurückkommt
           pxError.Endpoint = PxUrlFormatter.getEndpoint(error.url, this.connectionSettingsService.current.WebserviceUrl);
           pxError.Status = error.status;
           this.errorService.fireError(pxError);
           console.log("Error Interceptor: " + error.message);
-          return Observable.throw(pxError);
+          return throwError(pxError);
         } else {
-          return Observable.throw(error);
+          return throwError(error);
         }
-      });
+      }));
   }
-
 }
