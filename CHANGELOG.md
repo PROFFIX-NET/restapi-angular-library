@@ -1,5 +1,7 @@
-2.0.11 ()
+2.0.11 (31.05.2018)
 ------------------
+- angular updated durchgeführt (v6)
+- veraltetes @angular/http durch neuen @angular/common/http client ersetzt.
 - fix moment js warning im px-date-formatter
 - px-date-formatter string handling überarbeitet.
 
