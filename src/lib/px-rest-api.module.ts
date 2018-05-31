@@ -1,5 +1,5 @@
 import { NgModule, Optional, SkipSelf, ModuleWithProviders } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
 // api-modules/adr
@@ -60,33 +60,24 @@ import { PxStundenartService } from './api-modules/zei/stundenart/px-stundenart.
 import { PxStundeninfoService } from './api-modules/zei/stundeninfo/px-stundeninfo.service';
 import { StundensperreService } from './api-modules/zei/stundensperre/px-stundensperre.service';
 
-// authentification
-import { PxAuthentificationInterceptor } from './authentification/px-authentification-interceptor';
-import { PxAuthentificationInternalService } from './authentification/px-authentification-internal.service';
-
 // connection-settings
 import { PxConnectionSettingsService } from './connection-settings/px-connection-settings.service';
 
 // error
 import { PxErrorInterceptor } from './error/px-error-interceptor';
-import { PxInvalidFieldsInterceptor } from './error/px-invalid-fields-interceptor';
-import { PxInvalidFieldsService } from './error/px-invalid-fields.service';
+import { PxErrorService } from './error/px-error.service';
 
 // http
-import { PX_REQUEST_INTERCEPTORS } from './http/px-request-interceptor';
-import { PX_RESPONSE_INTERCEPTORS } from './http/px-response-interceptor';
 import { PxHttpService } from './http/px-http.service';
+import { PxHttpInterceptor } from './http/px-http-interceptor';
 
 // local-storage
 import { PxLocalStorageService } from './local-storage/px-local-storage.service';
 
-// session
-import { PxSessionIdInterceptor } from './session/px-session-id-interceptor';
-
 @NgModule({
   imports: [
     CommonModule,
-    HttpModule
+    HttpClientModule
   ]
 })
 export class PxRestApiModule {
@@ -159,30 +150,20 @@ export class PxRestApiModule {
         PxStundeninfoService,
         StundensperreService,
 
-        // authentification
-        PxAuthentificationInterceptor,
-        PxAuthentificationInternalService,
-
         // connection-settings
         PxConnectionSettingsService,
 
-        // error
-        PxErrorInterceptor,
-        PxInvalidFieldsInterceptor,
-        PxInvalidFieldsService,
-
         // http
-        { provide: PX_REQUEST_INTERCEPTORS, useExisting: PxSessionIdInterceptor, multi: true },
-        { provide: PX_RESPONSE_INTERCEPTORS, useExisting: PxSessionIdInterceptor, multi: true },
-        { provide: PX_RESPONSE_INTERCEPTORS, useExisting: PxAuthentificationInterceptor, multi: true },
-        { provide: PX_RESPONSE_INTERCEPTORS, useExisting: PxErrorInterceptor, multi: true },
         PxHttpService,
+        { provide: HTTP_INTERCEPTORS, useClass: PxHttpInterceptor, multi: true },
+
+        // error
+        PxErrorService,
+        { provide: HTTP_INTERCEPTORS, useClass: PxErrorInterceptor, multi: true },
+
 
         // local-storage
         PxLocalStorageService,
-
-        // session
-        PxSessionIdInterceptor
       ]
     };
   }

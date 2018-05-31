@@ -1,34 +1,59 @@
 import { Injectable } from "@angular/core";
-import { Response } from "@angular/http";
+import {
+  HttpInterceptor,
+  HttpRequest,
+  HttpHandler,
+  HttpSentEvent,
+  HttpHeaderResponse,
+  HttpProgressEvent,
+  HttpResponse,
+  HttpUserEvent,
+  HttpHeaders,
+  HttpErrorResponse
+} from "@angular/common/http";
 import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/catch";
 import 'rxjs/add/observable/throw';
 
-import { PxHttpService } from "../http/px-http.service";
-import { PxResponseInterceptor } from "../http/px-response-interceptor";
 import { PxError } from "./px-error.model";
+import { PxUrlFormatter } from "../utils/px-url-formatter";
+import { PxConnectionSettingsService } from "../connection-settings/px-connection-settings.service";
+import { PxErrorService } from "./px-error.service";
+
 
 /**
  * Interceptor welcher den fehlgeschlagenen HTTP-Response in unser Error-Objekt umwandelt.
  * Muss dem Injector hinzugefügt werden über den OpaqueToken RESPONSE_INTERCEPTORS
  */
 @Injectable()
-export class PxErrorInterceptor implements PxResponseInterceptor {
+export class PxErrorInterceptor implements HttpInterceptor {
 
   /**
-   * Wirft einen Error in den HTTP-Stream
-   * @param httpService Referenz zum aktuellen HTTP-Service damit keine zweite Instanz erstellt wird
-   * @param observable Response-Observable zum verarbeiten und weitergeben
+   * Object Konstruktor
+   * @param connectionSettingsService Verbindungseinstellungsservice
    */
-  public processResponse(httpService: PxHttpService, observable: Observable<Response>): Observable<Response> {
+  constructor(private connectionSettingsService: PxConnectionSettingsService, private errorService: PxErrorService) { }
 
-    // Wandle Response in Error um
-    return observable.catch((res: Response) => {
-      const error: PxError = res.json() as PxError; // TODO Was passiert wenn kein Error-Model zurückkommt
-      error.Endpoint = httpService.getEndpoint(res.url);
-      error.Status = res.status;
-      console.log("Error Interceptor: " + res.text());
-      return Observable.throw(error);
-    });
+  /**
+   * Request und Response verarbeiten
+   * @param req Request
+   * @param next Http Handler
+   */
+  intercept(req: HttpRequest<any>, next: HttpHandler):
+    Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>> {
+    return next.handle(req)
+      .catch(error => {
+        if (error instanceof HttpErrorResponse) {
+          const pxError: PxError = error.error as PxError; // TODO Was passiert wenn kein Error-Model zurückkommt
+          pxError.Endpoint = PxUrlFormatter.getEndpoint(error.url, this.connectionSettingsService.current.WebserviceUrl);
+          pxError.Status = error.status;
+          this.errorService.fireError(pxError);
+          console.log("Error Interceptor: " + error.message);
+          return Observable.throw(pxError);
+        } else {
+          return Observable.throw(error);
+        }
+      });
   }
+
 }

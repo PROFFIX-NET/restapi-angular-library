@@ -1,14 +1,10 @@
 import { Injectable, Inject } from "@angular/core";
-import { Http, Response, RequestOptionsArgs, RequestOptions, RequestMethod, Headers, URLSearchParams } from "@angular/http";
+import { HttpClient, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from "rxjs/Observable";
-import { ReplaySubject } from "rxjs/ReplaySubject";
 import 'rxjs/add/operator/map';
-import "rxjs/add/operator/mergeMap";
 
 import { PxConnectionSettingsService } from '../connection-settings/px-connection-settings.service';
-import { PX_RESPONSE_INTERCEPTORS, PxResponseInterceptor } from "./px-response-interceptor";
-import { PX_REQUEST_INTERCEPTORS, PxRequestInterceptor } from "./px-request-interceptor";
-
+import { PxUrlFormatter } from "../utils/px-url-formatter";
 
 /**
  * HTTP Server welcher die Verbindung zur REST API sicherstellt.
@@ -19,68 +15,16 @@ import { PX_REQUEST_INTERCEPTORS, PxRequestInterceptor } from "./px-request-inte
 export class PxHttpService {
 
   public constructor(
-    private http: Http,
-    private connectionSettingsService: PxConnectionSettingsService,
-    @Inject(PX_REQUEST_INTERCEPTORS) private requestInterceptors: PxRequestInterceptor[],
-    @Inject(PX_RESPONSE_INTERCEPTORS) private responseInterceptors: PxResponseInterceptor[]
+    private http: HttpClient,
+    private connectionSettingsService: PxConnectionSettingsService
   ) { }
 
   /**
    * Erstellt die komplette URL für einen Endpunkt
    * @param string urlOrEndpoint Endpunkt (z.B PRO/Info) oder komplette URL (wird unverändert zurückgegeben), "/" werden getrimmt
    */
-  public getAbsolutUrl(urlOrEndpoint: string): string {
-    if (urlOrEndpoint.startsWith("http")) {
-      return urlOrEndpoint;
-    }
-
-    const baseUrl: string = this.connectionSettingsService.current.WebserviceUrl;
-    return this.trim(baseUrl, "/") + "/" + this.trim(urlOrEndpoint, "/");
-  }
-
-  /**
-   * Extrahiert den Endpunkt aus einer kompletten URL
-   * @param string urlOrEndpoint Endpunkt (z.B PRO/Info) oder komplette URL, "/" werden getrimmt
-   */
-  public getEndpoint(urlOrEndpoint: string): string {
-    let baseUrl: string = this.connectionSettingsService.current.WebserviceUrl;
-    baseUrl = this.trim(baseUrl, "/");
-    urlOrEndpoint = this.trim(urlOrEndpoint, "/");
-
-    return this.trimStart(this.trimStart(urlOrEndpoint, baseUrl), "/");
-  }
-
-  /**
-   * Führt einen HTTP-Request auf die REST API aus
-   * @param method HTTP Methode: GET, POST, PUT, DELETE
-   * @param endpoint Endpunkt der aufgerufen wird z.B PRO/Info
-   * @param options Request Options
-   */
-  public request(method: RequestMethod, endpoint: string, options?: RequestOptionsArgs): Observable<Response> {
-
-    // RequestOptions setzen und mit allfällig übergebenen RequestOptions zusammenführen
-    options = new RequestOptions({
-      method: method,
-      url: this.getAbsolutUrl(endpoint)
-    }).merge(options);
-
-    const subject: ReplaySubject<RequestOptionsArgs> = new ReplaySubject<RequestOptionsArgs>();
-    subject.next(options);
-    subject.complete();
-
-    // Durchlaufe alle Request-Interceptors
-    let requestObservable: Observable<RequestOptionsArgs> = subject.asObservable();
-    for (const interceptor of this.requestInterceptors) {
-      requestObservable = interceptor.processRequest(this, requestObservable);
-    }
-
-    // Durchlaufe alle Response-Interceptors
-    let responseObservable: Observable<Response> = requestObservable.flatMap(o => this.http.request(o.url, o)); // Request ausführen
-    for (const interceptor of this.responseInterceptors) {
-      responseObservable = interceptor.processResponse(this, responseObservable);
-    }
-
-    return responseObservable;
+  private getAbsolutUrl(urlOrEndpoint: string): string {
+    return PxUrlFormatter.getAbsolutUrl(urlOrEndpoint, this.connectionSettingsService.current.WebserviceUrl);
   }
 
   /**
@@ -90,9 +34,7 @@ export class PxHttpService {
    * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
    */
   public get<T>(endpoint: string, params?: object): Observable<T> {
-    return this.request(RequestMethod.Get, endpoint, this.createRequestOption(params)).map(
-      (response: Response) => response.json() as T
-    );
+    return this.http.get<T>(this.getAbsolutUrl(endpoint), this.createRequestOption(params));
   }
 
   /**
@@ -102,9 +44,12 @@ export class PxHttpService {
    * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
    */
   public post(endpoint: string, body: any, params?: Object): Observable<string> {
-    return this.request(RequestMethod.Post, endpoint, this.createRequestOption(params, body)).map(
-      (response: Response) => response.headers.get("Location")    // extrahiere Location aus Header
-    );
+    const option = this.createRequestOption(params);
+    return this.http.post<HttpResponse<any>>(this.getAbsolutUrl(endpoint),
+      JSON.stringify(body), { headers: option.headers, params: option.params, observe: 'response' })
+      .map(response => {
+        return response.headers.get("Location");
+      });
   }
 
   /**
@@ -114,9 +59,8 @@ export class PxHttpService {
    * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
    */
   public put(endpoint: string, body: any, params?: Object): Observable<void> {
-    return this.request(RequestMethod.Put, endpoint, this.createRequestOption(params, body)).map(
-      (response: Response) => undefined     // mappe zu "nichts"
-    );
+    return this.http.put<void>(this.getAbsolutUrl(endpoint),
+      JSON.stringify(body), this.createRequestOption(params));
   }
 
   /**
@@ -125,48 +69,7 @@ export class PxHttpService {
    * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
    */
   public delete(endpoint: string, params?: Object): Observable<void> {
-    return this.request(RequestMethod.Delete, endpoint, this.createRequestOption(params)).map(
-      (response: Response) => undefined     // mappe zu "nichts"
-    );
-  }
-
-  /**
-   * Trimmt eine Zeichenkette am Anfang eines Strings weg
-   * @param str String der getrimmt wird
-   * @param separator Zeichen die getrimmt werden
-   */
-  private trimStart(str: string, separator: string): string { // TODO Stringfunktionen in eine Utils-Klasse
-    if (str && separator) {
-      while (str.startsWith(separator)) {
-        str = str.substr(separator.length);
-      }
-    }
-
-    return str;
-  }
-
-  /**
-   * Trimmt eine Zeichenkette am Ende eines Strings weg
-   * @param str String der getrimmt wird
-   * @param separator Zeichen die getrimmt werden
-   */
-  private trimEnd(str: string, separator: string): string { // TODO Stringfunktionen in eine Utils-Klasse
-    if (str && separator) {
-      while (str.endsWith(separator)) {
-        str = str.substr(0, str.length - separator.length);
-      }
-    }
-
-    return str;
-  }
-
-  /**
-   * Trimmt eine Zeichenkette am Anfang und Ende eines Strings weg
-   * @param str String der getrimmt wird
-   * @param separator Zeichen die getrimmt werden
-   */
-  private trim(str: string, separator: string): string { // TODO Stringfunktionen in eine Utils-Klasse
-    return this.trimEnd(this.trimStart(str, separator), separator);
+    return this.http.delete<void>(this.getAbsolutUrl(endpoint), this.createRequestOption(params));
   }
 
   /**
@@ -174,26 +77,22 @@ export class PxHttpService {
    * @param params URL-Parameter
    * @param body Body
    */
-  private createRequestOption(params?: Object, body?: any): RequestOptions {
-    const requestOptions = new RequestOptions();
+  private createRequestOption(params?: Object): { headers?: HttpHeaders, params?} {
+    const requestOptions: { headers?: HttpHeaders, params?: HttpParams } = {};
 
     // URL-Parameter hinzufügen, wenn vorhanden
     if (params) {
       for (const param in params) {
         if (params.hasOwnProperty(param)) {
-          if (requestOptions.search == null) {
-            requestOptions.search = new URLSearchParams();
+          if (requestOptions.params == null) {
+            requestOptions.params = new HttpParams();
           }
-          requestOptions.search.append(param, params[param]);
+          requestOptions.params = requestOptions.params.set(param, params[param]);
         }
       }
     }
 
-    // Body hinzufügen, wenn vorhanden
-    if (body) {
-      requestOptions.headers = new Headers({ "Content-Type": "application/json" });
-      requestOptions.body = JSON.stringify(body);
-    }
+    requestOptions.headers = new HttpHeaders({ "Content-Type": "application/json" });
 
     return requestOptions;
   }

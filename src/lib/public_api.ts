@@ -127,8 +127,8 @@ export * from './connection-settings/px-connection-settings.service';
 
 // error
 export * from './error/px-error.model';
+export * from './error/px-error.service';
 export * from './error/px-invalid-field.model';
-export * from './error/px-invalid-fields.service';
 
 // http
 export * from './http/px-global-query-parameter';
