@@ -84,7 +84,7 @@ export class PxHttpService {
     // URL-Parameter hinzufügen, wenn vorhanden
     if (params) {
       for (const param in params) {
-        if (params.hasOwnProperty(param)) {
+        if (params.hasOwnProperty(param) && params[param]) {
           if (requestOptions.params == null) {
             requestOptions.params = new HttpParams();
           }
