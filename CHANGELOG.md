@@ -1,3 +1,11 @@
+2.0.13 (05.06.2018)
+-------------------
+- Fehler beim AutoLogin korrigiert
+
+2.0.12 (01.06.2018)
+-------------------
+- Fehler in PxHttpServer beim Hinzufügen von Parametern behoben
+
 2.0.11 (31.05.2018)
 ------------------
 - angular updated durchgeführt (v6)

@@ -28,9 +28,16 @@ export class PxLoginService implements PxRestApiServiceInterface {
   private autoLogin: PxLogin = null;
   private loginSubject: Subject<PxLogin> = new Subject<PxLogin>();
 
-  public constructor(private httpService: PxHttpService,
+  public constructor(
+    private httpService: PxHttpService,
     private configuration: PxConfiguration,
-    private localStorageService: PxLocalStorageService) { }
+    private localStorageService: PxLocalStorageService
+  ) {
+    const autoLogin = this.localStorageService.get(PxLoginService.localstorageKeyAutoLogin) as PxLogin;
+    if (autoLogin) {
+      this.autoLogin = autoLogin;
+    }
+  }
 
   /**
    * Observable des Login-Streams, wird jedesmal gefeuert wenn der Login (und der automatische AutoLogin) statt findet oder fehlschlägt

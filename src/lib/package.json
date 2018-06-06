@@ -1,6 +1,6 @@
 {
   "name": "@proffix/restapi-angular-library",
-  "version": "2.0.12",
+  "version": "2.0.13",
   "author": "PROFFIX Software AG <info@proffix.net> (http://www.proffix.net)",
   "license": "Apache-2.0",
   "private": false,
@@ -15,8 +15,8 @@
   },
   "homepage": "https://github.com/PROFFIX-NET/restapi-angular-library#readme",
   "peerDependencies": {
-    "@angular/core": "^5.0.0",
-    "@angular/common": "^5.0.0",
-    "moment": "2.21.0"
+    "@angular/core": "^6.0.0",
+    "@angular/common": "^6.0.0",
+    "moment": "^2.21.0"
   }
 }
