@@ -1,5 +1,5 @@
 
-import {throwError as observableThrowError,  Observable ,  BehaviorSubject } from 'rxjs';
+import { throwError, Observable, BehaviorSubject } from 'rxjs';
 import { Injectable } from "@angular/core";
 import {
   HttpInterceptor,
@@ -10,19 +10,8 @@ import {
   HttpProgressEvent,
   HttpResponse,
   HttpUserEvent,
-  HttpHeaders,
   HttpErrorResponse
 } from "@angular/common/http";
-
-
-
-
-
-
-
-
-
-import { debug } from "util";
 import { PxLoginService } from "../api-modules/pro/login/px-login.service";
 import { map, catchError, switchMap, finalize, filter, take } from 'rxjs/operators';
 
@@ -36,7 +25,7 @@ export class PxHttpInterceptor implements HttpInterceptor {
   private static SESSION_ID_HEADER = "PxSessionId";
   private sessionId: string;
   private reAuthentication = false;
-  private sessionIdSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  private waitingForLoginSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   /**
    * Object Konstruktor
@@ -65,7 +54,7 @@ export class PxHttpInterceptor implements HttpInterceptor {
               return this.handle401Error(req, next);
           }
         } else {
-          return observableThrowError(error);
+          return throwError(error);
         }
       }));
   }
@@ -93,29 +82,32 @@ export class PxHttpInterceptor implements HttpInterceptor {
    * HTTP 401 Error Handling. Hier wir die ReAuthentication durcheführt.
    */
   handle401Error(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
-    if (!this.reAuthentication) {
+    if (!this.reAuthentication) { // wenn Login bereits läuft, dann nicht nochmals Login versuchen
       this.reAuthentication = true;
 
       // Hier wird die SessionId geresettet und alle anderen Requests warten bis der Login
       // abgeschlossen ist dann werden diese ausgeführt.
-      this.sessionIdSubject.next(null);
+      this.waitingForLoginSubject.next(false);
 
       this.loginService.doLogin().pipe(
         switchMap(() => {
-          this.sessionIdSubject.next(this.sessionId);
-          return next.handle(this.addSessionId(req));
+          this.waitingForLoginSubject.next(true);
+          return next.handle(this.addSessionId(req)); // ursprünglicher Request wird erneut gefeuert
         }),
         catchError(error => {
-          return observableThrowError(error); // Wenn der automatische Login fehlschlägt, Observable weiterwerfen
+          return throwError(error); // Wenn der automatische Login fehlschlägt, Observable weiterwerfen
         }),
         finalize(() => {
           this.reAuthentication = false;
         }));
     } else {
-      return this.sessionIdSubject.pipe(
-        filter(sessionId => sessionId != null),
+
+      // Sobald sessionIdSubject feuert, wird der ursprüngliche Request (next) gefeuert
+      // durch switchMap wird next erst gefeuert wenn sessionIdSubject feuert (und nicht null ist, siehe filter)
+      return this.waitingForLoginSubject.pipe(
+        filter(isLoggedIn => isLoggedIn === true),
         take(1),
-        switchMap(sessionId => {
+        switchMap(() => {
           return next.handle(this.addSessionId(req));
         }));
     }

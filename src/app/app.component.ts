@@ -8,7 +8,9 @@ import {
   PxLogin,
   PxLoginService,
   PxStundeninfo,
-  PxStundeninfoService
+  PxStundeninfoService,
+  PxStempelService,
+  PxMitarbeiterService
 } from "../lib/public_api";
 import { AppConfiguration } from './app.configuration';
 
@@ -26,7 +28,7 @@ export class AppComponent implements OnInit {
     private connectionSettingsService: PxConnectionSettingsService,
     private infoService: PxInfoService,
     private loginService: PxLoginService,
-    private stundeninfoService: PxStundeninfoService
+    private stundeninfoService: PxStundeninfoService, private s: PxStempelService, private m: PxMitarbeiterService
   ) {
     this.connectionSettingsService.current = {
       WebserviceUrl: "https://remote.proffix.net:11011/pxapi/v2",
@@ -68,6 +70,14 @@ export class AppComponent implements OnInit {
   }
 
   private getStundeninfo(): void {
+    this.m.getAll().subscribe(m => {
+      m.forEach(element => {
+        this.s.getStempel(element.MitarbeiterNr).subscribe(s => {
+          console.log(element);
+          console.log(s);
+        });
+      });
+    });
     this.printLog("Stundeninfo abrufen...");
     this.stundeninfoService.getStundeninfo().subscribe(
       stundeninfo => this.printLog(`Stundeninfo abrufen erfolgreich, aktueller Stundensaldo: ${stundeninfo.SaldoVortag}`),

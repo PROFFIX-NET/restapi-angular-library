@@ -10,7 +10,6 @@ import {
   HttpProgressEvent,
   HttpResponse,
   HttpUserEvent,
-  HttpHeaders,
   HttpErrorResponse
 } from "@angular/common/http";
 
