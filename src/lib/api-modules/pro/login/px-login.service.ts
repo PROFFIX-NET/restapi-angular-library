@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { throwError, Observable, Subject } from 'rxjs';
+import { throwError, Observable, BehaviorSubject } from 'rxjs';
 import { tap, mergeMap, finalize } from 'rxjs/operators';
 
 
@@ -26,7 +26,7 @@ export class PxLoginService implements PxRestApiServiceInterface {
 
   private login: PxLogin = null;
   private autoLogin: PxLogin = null;
-  private loginSubject: Subject<PxLogin> = new Subject<PxLogin>();
+  private loginSubject: BehaviorSubject<PxLogin> = new BehaviorSubject<PxLogin>(null);
 
   public constructor(
     private httpService: PxHttpService,
@@ -41,7 +41,8 @@ export class PxLoginService implements PxRestApiServiceInterface {
 
   /**
    * Observable des Login-Streams, wird jedesmal gefeuert wenn der Login (und der automatische AutoLogin) statt findet oder fehlschlägt
-   * Bei erfolgreichem Login, befindet sich darin das PxLogin-Objekt, wenn der Login fehlschlägt wird ein Error geworfen
+   * Bei erfolgreichem Login, befindet sich darin das PxLogin-Objekt, wenn der Login fehlschlägt wird ein Error geworfen.
+   * Bei einem Logout oder wenn noch kein Login stattgefunden hat, wird null zurückgegeben.
    */
   public get loginObservable(): Observable<PxLogin> {
     return this.loginSubject.asObservable();
