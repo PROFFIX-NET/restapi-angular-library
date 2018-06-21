@@ -14,6 +14,8 @@ import {
 } from "@angular/common/http";
 import { PxLoginService } from "../api-modules/pro/login/px-login.service";
 import { map, catchError, switchMap, finalize, filter, take } from 'rxjs/operators';
+import { PxConnectionSettingsService } from '../connection-settings/px-connection-settings.service';
+import { PxUrlFormatter } from '../utils/px-url-formatter';
 
 /**
  * HTTP-Interceptor für das Session und Reauthorizaion Handling.
@@ -31,7 +33,7 @@ export class PxHttpInterceptor implements HttpInterceptor {
    * Object Konstruktor
    * @param loginService Login Service wird für die ReAuthentication benötigt.
    */
-  public constructor(private loginService: PxLoginService) { }
+  public constructor(private loginService: PxLoginService, private connectionSettingsService: PxConnectionSettingsService) { }
 
   /**
    * Request und Response verarbeiten
@@ -49,9 +51,15 @@ export class PxHttpInterceptor implements HttpInterceptor {
       }),
       catchError(error => {
         if (error instanceof HttpErrorResponse) {
-          switch (error.status) {
-            case 401:
-              return this.handle401Error(req, next);
+          if (this.reAuthentication && req.url === this.loginUrl) {
+            // ReAuthentication ist fehlgeschlagen. Error wird weitergeleitet.
+            return throwError(error);
+          } else if (error.status === 401) {
+            // Bei 401 Error wird eine ReAuthentication durchgeführt.
+            return this.handle401Error(req, next);
+          } else {
+            // Alle anderen Errors werden weitergeleitet.
+            return throwError(error);
           }
         } else {
           return throwError(error);
@@ -81,7 +89,7 @@ export class PxHttpInterceptor implements HttpInterceptor {
   /**
    * HTTP 401 Error Handling. Hier wir die ReAuthentication durcheführt.
    */
-  handle401Error(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
+  private handle401Error(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
     if (!this.reAuthentication) { // wenn Login bereits läuft, dann nicht nochmals Login versuchen
       this.reAuthentication = true;
 
@@ -89,7 +97,7 @@ export class PxHttpInterceptor implements HttpInterceptor {
       // abgeschlossen ist dann werden diese ausgeführt.
       this.waitingForLoginSubject.next(false);
 
-      this.loginService.doLogin().pipe(
+      return this.loginService.doLogin().pipe(
         switchMap(() => {
           this.waitingForLoginSubject.next(true);
           return next.handle(this.addSessionId(req)); // ursprünglicher Request wird erneut gefeuert
@@ -101,7 +109,6 @@ export class PxHttpInterceptor implements HttpInterceptor {
           this.reAuthentication = false;
         }));
     } else {
-
       // Sobald sessionIdSubject feuert, wird der ursprüngliche Request (next) gefeuert
       // durch switchMap wird next erst gefeuert wenn sessionIdSubject feuert (und nicht null ist, siehe filter)
       return this.waitingForLoginSubject.pipe(
@@ -111,6 +118,10 @@ export class PxHttpInterceptor implements HttpInterceptor {
           return next.handle(this.addSessionId(req));
         }));
     }
+  }
+
+  private get loginUrl(): string {
+    return PxUrlFormatter.getAbsolutUrl(this.loginService.endpoint, this.connectionSettingsService.current.WebserviceUrl);
   }
 }
 

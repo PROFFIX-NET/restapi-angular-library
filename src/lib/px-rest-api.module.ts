@@ -153,14 +153,13 @@ export class PxRestApiModule {
         // connection-settings
         PxConnectionSettingsService,
 
+         // error
+         PxErrorService,
+         { provide: HTTP_INTERCEPTORS, useClass: PxErrorInterceptor, multi: true },
+
         // http
         PxHttpService,
         { provide: HTTP_INTERCEPTORS, useClass: PxHttpInterceptor, multi: true },
-
-        // error
-        PxErrorService,
-        { provide: HTTP_INTERCEPTORS, useClass: PxErrorInterceptor, multi: true },
-
 
         // local-storage
         PxLocalStorageService,
