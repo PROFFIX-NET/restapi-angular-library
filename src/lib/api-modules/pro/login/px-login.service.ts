@@ -90,6 +90,7 @@ export class PxLoginService implements PxRestApiServiceInterface {
  */
   public removeAutoLogin() {
     this.localStorageService.remove(PxLoginService.localstorageKeyAutoLogin);
+    this.autoLogin = null;
   }
 
   /**
