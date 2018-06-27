@@ -1,3 +1,8 @@
+2.0.14 (21.06.2018)
+-------------------
+- AutoLogin refactored
+- Optionaler Parameter bei ZEI/Stempel integriert
+
 2.0.13 (05.06.2018)
 -------------------
 - Fehler beim AutoLogin korrigiert

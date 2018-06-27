@@ -91,6 +91,7 @@ export class PxLoginService implements PxRestApiServiceInterface {
  */
   public removeAutoLogin() {
     this.localStorageService.remove(PxLoginService.localstorageKeyAutoLogin);
+    this.autoLogin = null;
   }
 
   /**
@@ -117,12 +118,15 @@ export class PxLoginService implements PxRestApiServiceInterface {
       tap(null, error => this.fireLoginError(error)),
       mergeMap((location: string) => this.httpService.get<PxLogin>(location)),
       tap((newLogin: PxLogin) => {
+        // Login erfolgreich das newLogin Object wird auf die lokale variable login gespeichert.
         newLogin.Passwort = login.Passwort; // Passwort wird von der REST API entfernt, muss wieder eingefügt werden für AutoLogin
-        this.login = newLogin; // Neuer Login im Login-Service speichern (für AutoLogin)
+        this.login = newLogin; // Neuer Login im Login-Service speichern (für ReLogin)
         this.fireLoginSuccessful(newLogin);
-        if (activateAutoLogin) {
-          this.activateAutoLogin(newLogin);
-        }
+        if (activateAutoLogin) { this.activateAutoLogin(newLogin); }
+      }, error => {
+        // Login fehlgeschlagen. Lokales login Object wird zurückgesetzt.
+        this.login = null;
+        this.fireLoginError(error);
       }));
   }
 

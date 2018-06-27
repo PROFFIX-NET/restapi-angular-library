@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { PxHttpService } from '../../../http/px-http.service';
 import { PxRestApiServiceInterface } from '../../base-interfaces/px-rest-api-service-interface';
 import { PxStempel } from './px-stempel.model';
-import { PxMitarbeiter } from '../../../../../dist/lib/public_api';
+import { PxMitarbeiter } from '../../pro/mitarbeiter/px-mitarbeiter.model';
+
 
 /**
  * Stempelt und ruft den Stempelstatus ab
