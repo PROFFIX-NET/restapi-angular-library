@@ -11,7 +11,7 @@ import { PxBuchungsart } from "../buchungsart/px-buchungsart.model";
  * Model für Buchungszeilen in /FIB/Buchung
  */
 export interface PxBuchungszeile {
-  BuchungszeileNr: number;
+  BuchungszeileNr?: number;
   Buchungsart?: PxBuchungsart;
   Auftrag?: PxAuftrag;
   Belegart?: PxBelegart;

@@ -1,3 +1,7 @@
+2.0.16 (03.07.2018)
+-------------------
+- fix BuchungszeileNr im Buchung Model optional.
+
 2.0.15 (03.07.2018)
 -------------------
 - fix Buchung Model (Buchungsart)

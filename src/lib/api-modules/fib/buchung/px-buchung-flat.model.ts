@@ -16,7 +16,7 @@ import { PxSteuercode } from "../../pro/steuercode/px-steuercode.model";
  */
 export interface PxBuchungFlat extends PxRestApiModelInterface {
   BuchungNr?: number;
-  BuchungszeileNr: number;
+  BuchungszeileNr?: number;
   Buchungsdatum?: string;
   Belegdatum?: string;
   Belegnummer?: number;
