@@ -1,3 +1,8 @@
+2.0.15 (03.07.2018)
+-------------------
+- fix Buchung Model (Buchungsart)
+- BuchungszeileNr im Buchung Model hinzugefügt.
+
 2.0.14 (21.06.2018)
 -------------------
 - AutoLogin refactored

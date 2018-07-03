@@ -5,11 +5,14 @@ import { PxKonto } from "../konto/px-konto.model";
 import { PxWaehrung } from "../../pro/waehrung/px-waehrung.model";
 import { PxSteuercode } from "../../pro/steuercode/px-steuercode.model";
 import { PxZahlungsart } from "../../adr/zahlungsart/px-zahlungsart.model";
+import { PxBuchungsart } from "../buchungsart/px-buchungsart.model";
 
 /**
  * Model für Buchungszeilen in /FIB/Buchung
  */
 export interface PxBuchungszeile {
+  BuchungszeileNr: number;
+  Buchungsart?: PxBuchungsart;
   Auftrag?: PxAuftrag;
   Belegart?: PxBelegart;
   Betraege?: PxBetrag[];

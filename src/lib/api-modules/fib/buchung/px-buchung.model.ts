@@ -1,6 +1,5 @@
 import { PxRestApiModelInterface } from '../../base-interfaces/px-rest-api-model-interface';
 import { PxKondition } from '../../pro/kondition/px-kondition.model';
-import { PxBuchungsart } from '../buchungsart/px-buchungsart.model';
 import { PxAdresse } from '../../adr/adresse/px-adresse.model';
 import { PxBuchungszeile } from './px-buchungszeile.model';
 
@@ -14,7 +13,6 @@ export interface PxBuchung extends PxRestApiModelInterface {
   Belegdatum?: string;
   Belegnummer?: number;
   Kondition?: PxKondition;
-  Buchungsart?: PxBuchungsart;
   EinzahlungMitteilung?: string;
   Verfalldatum?: string;
   Adresse?: PxAdresse;
