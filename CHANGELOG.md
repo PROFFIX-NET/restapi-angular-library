@@ -1,3 +1,8 @@
+2.0.17 (21.08.2018)
+-------------------
+- moment js import refactored
+- PxDateFormat Konstante definiert
+
 2.0.16 (03.07.2018)
 -------------------
 - fix BuchungszeileNr im Buchung Model optional.
