@@ -1,3 +1,7 @@
+2.0.18 (21.08.2018)
+-------------------
+- PxDateFormatter updated
+
 2.0.17 (21.08.2018)
 -------------------
 - moment js import refactored
