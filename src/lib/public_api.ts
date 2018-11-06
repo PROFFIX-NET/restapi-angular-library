@@ -95,6 +95,9 @@ export * from './api-modules/pro/vertreter/px-vertreter.model';
 export * from './api-modules/pro/vertreter/px-vertreter.service';
 export * from './api-modules/pro/waehrung/px-waehrung.model';
 export * from './api-modules/pro/waehrung/px-waehrung.service';
+export * from './api-modules/pro/benutzereinstellungen/px-benutzer-einstellung-level.enum';
+export * from './api-modules/pro/benutzereinstellungen/px-benutzer-einstellung.model';
+export * from './api-modules/pro/benutzereinstellungen/px-benutzer-einstellung.service';
 
 // api-modules/stu
 export * from './api-modules/stu/positionsart/px-positionsart.model';

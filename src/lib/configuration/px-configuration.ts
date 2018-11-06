@@ -10,6 +10,11 @@ import { PxModule } from '../api-modules/pro/login/px-module.enum';
 export abstract class PxConfiguration {
 
   /**
+   * Muss überschrieben werden. Der Client Name wird für das laden / speichern der Benutzereinstellungen benötigt.
+   */
+  public abstract get clientName(): string;
+
+  /**
    * Muss überschrieben werden und die minimal benötigte Webservice Version zurückgeben
    */
   public abstract get requiredWebserviceVersion(): PxVersion;

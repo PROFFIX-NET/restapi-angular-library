@@ -35,6 +35,7 @@ import { PxDatenbankService } from './api-modules/pro/datenbank/px-datenbank.ser
 import { PxEinheitService } from './api-modules/pro/einheit/px-einheit.service';
 import { PxEinheitsmatrixService } from './api-modules/pro/einheitsmatrix/px-einheitsmatrix.service';
 import { PxEinstellungService } from './api-modules/pro/einstellung/px-einstellung.service';
+import { PxBenutzerEinstellungService } from './api-modules/pro/benutzereinstellungen/px-benutzer-einstellung.service';
 import { PxFelddefinitionService } from './api-modules/pro/felddefinition/px-felddefinition.service';
 import { PxInfoService } from './api-modules/pro/info/px-info.service';
 import { PxKonditionService } from './api-modules/pro/kondition/px-kondition.service';
@@ -125,6 +126,7 @@ export class PxRestApiModule {
         PxEinheitService,
         PxEinheitsmatrixService,
         PxEinstellungService,
+        PxBenutzerEinstellungService,
         PxFelddefinitionService,
         PxInfoService,
         PxKonditionService,
