@@ -1,3 +1,7 @@
+2.0.19 (06.11.2018)
+-------------------
+- Benutzereinstellung Endpunkt implementiert
+
 2.0.18 (21.08.2018)
 -------------------
 - PxDateFormatter updated
