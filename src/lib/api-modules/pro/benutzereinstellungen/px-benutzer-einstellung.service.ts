@@ -1,5 +1,5 @@
-import { Injectable, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { Observable, Subscription, of, BehaviorSubject } from 'rxjs';
 
 import { PxHttpService } from '../../../http/px-http.service';
 import { PxGlobalQueryParameter } from '../../../http/px-global-query-parameter';
@@ -9,6 +9,8 @@ import { PxPuttableServiceInterface } from '../../base-interfaces/px-puttable-se
 import { PxPostableServiceInterface } from '../../base-interfaces/px-postable-service-interface';
 import { PxDeletableServiceInterface } from '../../base-interfaces/px-deletable-service-interface';
 import { PxConfiguration } from '../../../configuration/px-configuration';
+import { PxLoginService } from '../login/px-login.service';
+import { tap, filter, map } from 'rxjs/operators';
 
 
 /**
@@ -23,7 +25,21 @@ export class PxBenutzerEinstellungService implements PxGettableAllServiceInterfa
 
   private loginSubscription: Subscription;
 
-  constructor(private httpService: PxHttpService, private configuration: PxConfiguration) {
+  private cache: Map<string, PxBenutzerEinstellung>;
+
+  constructor(private httpService: PxHttpService, private configuration: PxConfiguration, private loginService: PxLoginService) {
+    this.loginSubscription = this.loginService.loginObservable.subscribe(login => {
+      if (login) {
+        this.cache = null;
+        this.getAll().subscribe(settings => {
+          const helper = new Map<string, PxBenutzerEinstellung>();
+          settings.forEach(setting => {
+            helper.set(setting.Schluessel, setting);
+          })
+          this.cache = helper;
+        });
+      }
+    });
   }
 
   /**
@@ -38,8 +54,12 @@ export class PxBenutzerEinstellungService implements PxGettableAllServiceInterfa
    * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
    */
   public getAll(params?: PxGlobalQueryParameter): Observable<PxBenutzerEinstellung[]> {
-      this.updateParams(params);
+    if (!params && this.cache) {
+      return of(Array.from(this.cache.values()));
+    } else {
+      params = this.createOrUpdateParams(params);
       return this.httpService.get<PxBenutzerEinstellung[]>(this.endpoint, params);
+    }
   }
 
   /**
@@ -48,8 +68,16 @@ export class PxBenutzerEinstellungService implements PxGettableAllServiceInterfa
    * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
    */
   public get(schluessel: string, params?: PxGlobalQueryParameter): Observable<PxBenutzerEinstellung> {
-      this.updateParams(params);
-      return this.httpService.get<PxBenutzerEinstellung>(this.endpoint + "/" + this.getCombinedKey(schluessel), params);
+    if (!params && this.cache) {
+      return of(this.cache.get(this.getCombinedKey(schluessel)));
+    } else {
+      params = this.createOrUpdateParams(params);
+      // Hier wurde der Get mit getAll implementiert weil wir sonst einen 404 Error erhalten bei einer Schluessel abfragen
+      // ohne DB Eintrag. Beim getAll wird in diesem Fall ein leeres Array zurückgeliefert (kein 404 Error);
+      // return this.httpService.get<PxBenutzerEinstellung>(this.endpoint + "/" + this.getCombinedKey(schluessel), params);
+      params.filter = `Schluessel=='${this.getCombinedKey(schluessel)}',(${params.filter})`;
+      return this.getAll(params).pipe(map(settings => settings.length > 0 ? settings[0] : null));
+    }
   }
 
   /**
@@ -58,7 +86,8 @@ export class PxBenutzerEinstellungService implements PxGettableAllServiceInterfa
    */
   public post(benutzerEinstellung: PxBenutzerEinstellung): Observable<string> {
     this.updateKey(benutzerEinstellung);
-    return this.httpService.post(this.endpoint, benutzerEinstellung);
+    return this.httpService.post(this.endpoint, benutzerEinstellung).pipe(
+      tap(() => this.cache ? this.cache.set(benutzerEinstellung.Schluessel, benutzerEinstellung) : null));
   }
 
   /**
@@ -67,7 +96,8 @@ export class PxBenutzerEinstellungService implements PxGettableAllServiceInterfa
    */
   public put(benutzerEinstellung: PxBenutzerEinstellung): Observable<void> {
     this.updateKey(benutzerEinstellung);
-    return this.httpService.put(this.endpoint + "/" + benutzerEinstellung.Schluessel, benutzerEinstellung);
+    return this.httpService.put(this.endpoint + "/" + benutzerEinstellung.Schluessel, benutzerEinstellung).pipe(
+      tap(() => this.cache ? this.cache.set(benutzerEinstellung.Schluessel, benutzerEinstellung) : null));
   }
 
   /**
@@ -75,7 +105,8 @@ export class PxBenutzerEinstellungService implements PxGettableAllServiceInterfa
    * @param schluessel BuchungsNr welche gelöscht wird
    */
   public delete(schluessel: string): Observable<void> {
-    return this.httpService.delete(this.endpoint + "/" + this.getCombinedKey(schluessel));
+    return this.httpService.delete(this.endpoint + "/" + this.getCombinedKey(schluessel)).pipe(
+      tap(() => this.cache ? this.cache.delete(schluessel) : null));
   }
 
   /**
@@ -83,12 +114,12 @@ export class PxBenutzerEinstellungService implements PxGettableAllServiceInterfa
    * welcher im der Configration definiert wurde.
    * @param params Query Parameter
    */
-  private updateParams(params?: PxGlobalQueryParameter) {
+  private createOrUpdateParams(params?: PxGlobalQueryParameter): PxGlobalQueryParameter {
     if (!params) {
       params = { filter: `Schluessel@='${this.configuration.clientName}_'` };
     } else {
       if (params.filter) {
-        const regex = new RegExp(`[Ss]chluessel[@=!][=!]["']([A-Za-z0-9]+)["']`, "g");
+        const regex = new RegExp(`[Ss]chluessel[@=!][=!]["'](\\w+)["']`, "g");
         let match;
         let updatedFilter = params.filter;
         while (match = regex.exec(params.filter.toString())) {
@@ -99,6 +130,7 @@ export class PxBenutzerEinstellungService implements PxGettableAllServiceInterfa
       }
 
     }
+    return params;
   }
 
   /**
