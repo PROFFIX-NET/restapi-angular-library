@@ -123,7 +123,7 @@ export class PxBenutzerEinstellungService implements PxGettableAllServiceInterfa
         let match;
         let updatedFilter = params.filter;
         while (match = regex.exec(params.filter.toString())) {
-          const newValue = match[0].replace(match[1], `${this.configuration.clientName}_${match[1]}`);
+          const newValue = match[0].replace(match[1], this.getCombinedKey(match[1]));
           updatedFilter = updatedFilter.replace(match[0], newValue);
         }
         params.filter = updatedFilter;
