@@ -1,3 +1,8 @@
+2.0.20 (21.11.2018)
+-------------------
+- Angular Version aktualisiert (v7)
+- Bugfix Benutzereinstellung Endpunkt
+
 2.0.19 (06.11.2018)
 -------------------
 - Benutzereinstellung Endpunkt implementiert
