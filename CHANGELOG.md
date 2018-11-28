@@ -1,3 +1,11 @@
+2.0.22 (28.11.2018)
+-------------------
+- Fix Login Error (Uncaught TypeError: Cannot read property 'ngOriginalError' of null)
+
+2.0.21 (22.11.2018)
+-------------------
+- Cache für Benutzereinstellung Service implementiert
+
 2.0.20 (21.11.2018)
 -------------------
 - Angular Version aktualisiert (v7)

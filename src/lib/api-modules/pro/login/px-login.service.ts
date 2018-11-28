@@ -59,7 +59,7 @@ export class PxLoginService implements PxRestApiServiceInterface {
   /**
    * Feuert einen Error-Event in den Login-Stream
    */
-  public fireLoginError(error?: PxError): void {
+  public fireLoginError(error: PxError): void {
     this.loginSubject.error(error);
   }
 
@@ -105,7 +105,7 @@ export class PxLoginService implements PxRestApiServiceInterface {
     if (!login) {
       login = this.login || this.autoLogin;
       if (!login) {
-        this.fireLoginError();
+        this.fireLoginError({Endpoint: this.endpoint, Type:"GENERIC", Status: 401, Message:"No Login object availible" });
         return throwError(null); // Kein Login gefunden, daher Fehler werfen
       }
     }
