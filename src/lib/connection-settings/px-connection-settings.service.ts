@@ -19,10 +19,9 @@ export class PxConnectionSettingsService {
   ) { }
 
   /**
-   * Gibt die aktellen ConnectionSettings zurück (wird gecached).
-   * Falls Werte im Objekt angepasst werden, muss das Objekt neu gesetzt werden, sonst wird nichts gespeichert.
+   * Lädt die aktuellen Verbindungseinstellungen aus dem LocalStorage
    */
-  public get current(): PxConnectionSettings {
+  public load(): PxConnectionSettings {
     if (this.cache == null) {
       this.cache = {
         WebserviceUrl: this.localStorageService.get<string>(PxConnectionSettingsService.localstorageKeyWebserviceUrl),
@@ -31,7 +30,12 @@ export class PxConnectionSettingsService {
     }
     return this.cache;
   }
-  public set current(currentSettings: PxConnectionSettings) {
+
+  /**
+   * Speichert Verbindungseinstellungen im LocalStorage
+   * @param currentSettings Verbindungseinstellungen zum speichern
+   */
+  public save(currentSettings: PxConnectionSettings) {
     this.cache = currentSettings;
     this.localStorageService.set(PxConnectionSettingsService.localstorageKeyWebserviceUrl, currentSettings.WebserviceUrl);
     this.localStorageService.set(PxConnectionSettingsService.localstorageKeyPasswortHash, currentSettings.WebservicePasswortHash);

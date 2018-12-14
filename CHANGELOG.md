@@ -1,3 +1,10 @@
+3.0.0 (14.12.2018)
+==================
+- ***Breaking Change***: Sämtliche Datenmodelle entfernt, diese müssen zukünftig manuell und an das Projekt angepasst implementiert werden.
+- ***Breaking Change***: Services für Endpunkte entfernt. Neu den generischen `PxHttpService` verwenden.
+- Beispiel Applikation auf die neue Library angepasst
+
+
 2.0.22 (28.11.2018)
 -------------------
 - Fix Login Error (Uncaught TypeError: Cannot read property 'ngOriginalError' of null)
@@ -49,7 +56,7 @@
 2.0.11 (31.05.2018)
 ------------------
 - angular updated durchgeführt (v6)
-- veraltetes @angular/http durch neuen @angular/common/http client ersetzt.
+- veraltetes @angular/http durch neuen @angular/common/http client ersetzt ([#6](https://github.com/PROFFIX-NET/restapi-angular-library/issues/6))
 - fix moment js warning im px-date-formatter
 - px-date-formatter string handling überarbeitet.
 

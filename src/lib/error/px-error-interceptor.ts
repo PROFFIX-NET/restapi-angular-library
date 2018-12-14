@@ -44,7 +44,7 @@ export class PxErrorInterceptor implements HttpInterceptor {
       catchError(error => {
         if (error instanceof HttpErrorResponse) {
           const pxError: PxError = error.error as PxError; // TODO Was passiert wenn kein Error-Model zurückkommt
-          pxError.Endpoint = PxUrlFormatter.getEndpoint(error.url, this.connectionSettingsService.current.WebserviceUrl);
+          pxError.Endpoint = PxUrlFormatter.getEndpoint(error.url, this.connectionSettingsService.load().WebserviceUrl);
           pxError.Status = error.status;
           this.errorService.fireError(pxError);
           console.log("Error Interceptor: " + error.message);

@@ -1,4 +1,4 @@
-import { Injectable, Inject } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from "rxjs";
 
@@ -25,7 +25,7 @@ export class PxHttpService {
    * @param string urlOrEndpoint Endpunkt (z.B PRO/Info) oder komplette URL (wird unverändert zurückgegeben), "/" werden getrimmt
    */
   private getAbsolutUrl(urlOrEndpoint: string): string {
-    return PxUrlFormatter.getAbsolutUrl(urlOrEndpoint, this.connectionSettingsService.current.WebserviceUrl);
+    return PxUrlFormatter.getAbsolutUrl(urlOrEndpoint, this.connectionSettingsService.load().WebserviceUrl);
   }
 
   /**
@@ -44,13 +44,17 @@ export class PxHttpService {
    * @param body Daten-Objekt welches zum Server transportiert wird
    * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
    */
-  public post(endpoint: string, body: any, params?: Object): Observable<string> {
+  public post(endpoint: string, body: any, params?: object): Observable<string> {
     const option = this.createRequestOption(params);
-    return this.http.post<HttpResponse<any>>(this.getAbsolutUrl(endpoint),
-      JSON.stringify(body), { headers: option.headers, params: option.params, observe: 'response' }).pipe(
-        map(response => {
-          return response.headers.get("Location");
-        }));
+    return this.http.post<HttpResponse<any>>(
+      this.getAbsolutUrl(endpoint),
+      JSON.stringify(body),
+      { headers: option.headers, params: option.params, observe: 'response' }
+    ).pipe(
+      map(response => {
+        return response.headers.get("Location");
+      })
+    );
   }
 
   /**
@@ -59,9 +63,12 @@ export class PxHttpService {
    * @param body Daten-Objekt welches zum Server transportiert wird
    * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
    */
-  public put(endpoint: string, body: any, params?: Object): Observable<void> {
-    return this.http.put<void>(this.getAbsolutUrl(endpoint),
-      JSON.stringify(body), this.createRequestOption(params));
+  public put(endpoint: string, body: any, params?: object): Observable<void> {
+    return this.http.put<void>(
+      this.getAbsolutUrl(endpoint),
+      JSON.stringify(body),
+      this.createRequestOption(params)
+    );
   }
 
   /**
@@ -69,7 +76,7 @@ export class PxHttpService {
    * @param endpoint Endpunkt der aufgerufen wird z.B ADR/Adresse/1
    * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
    */
-  public delete(endpoint: string, params?: Object): Observable<void> {
+  public delete(endpoint: string, params?: object): Observable<void> {
     return this.http.delete<void>(this.getAbsolutUrl(endpoint), this.createRequestOption(params));
   }
 
@@ -78,7 +85,7 @@ export class PxHttpService {
    * @param params URL-Parameter
    * @param body Body
    */
-  private createRequestOption(params?: Object): { headers?: HttpHeaders, params?} {
+  private createRequestOption(params?: object): { headers?: HttpHeaders, params?} {
     const requestOptions: { headers?: HttpHeaders, params?: HttpParams } = {};
 
     // URL-Parameter hinzufügen, wenn vorhanden

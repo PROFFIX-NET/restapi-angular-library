@@ -1,9 +1,8 @@
-import { PxConnectionSettingsService } from "../connection-settings/px-connection-settings.service";
-
 /**
  * Hilfsklasse für die URL Formattierung.
  */
 
+// https://github.com/angular/angular/issues/21123
 // @dynamic
 export class PxUrlFormatter {
 

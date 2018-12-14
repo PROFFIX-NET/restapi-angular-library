@@ -12,7 +12,7 @@ import {
   HttpUserEvent,
   HttpErrorResponse
 } from "@angular/common/http";
-import { PxLoginService } from "../api-modules/pro/login/px-login.service";
+import { PxLoginService } from "../login/px-login.service";
 import { map, catchError, switchMap, finalize, filter, take } from 'rxjs/operators';
 import { PxConnectionSettingsService } from '../connection-settings/px-connection-settings.service';
 import { PxUrlFormatter } from '../utils/px-url-formatter';
@@ -121,7 +121,7 @@ export class PxHttpInterceptor implements HttpInterceptor {
   }
 
   private get loginUrl(): string {
-    return PxUrlFormatter.getAbsolutUrl(this.loginService.endpoint, this.connectionSettingsService.current.WebserviceUrl);
+    return PxUrlFormatter.getAbsolutUrl(this.loginService.endpoint, this.connectionSettingsService.load().WebserviceUrl);
   }
 }
 

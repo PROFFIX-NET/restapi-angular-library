@@ -1,18 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 
 import {
-  PxConnectionSettings,
   PxConnectionSettingsService,
   PxInfo,
   PxInfoService,
   PxLogin,
   PxLoginService,
-  PxStundeninfo,
-  PxStundeninfoService,
-  PxStempelService,
-  PxMitarbeiterService
 } from "../lib/public_api";
 import { AppConfiguration } from './app.configuration';
+import { PxHttpService } from '../lib/public_api';
+import { Mitarbeiter } from './models/mitarbeiter';
+import { Stundeninfo } from './models/stundeninfo';
 
 @Component({
   selector: 'app-root',
@@ -28,17 +26,17 @@ export class AppComponent implements OnInit {
     private connectionSettingsService: PxConnectionSettingsService,
     private infoService: PxInfoService,
     private loginService: PxLoginService,
-    private stundeninfoService: PxStundeninfoService, private s: PxStempelService, private m: PxMitarbeiterService
+    private httpService: PxHttpService
   ) {
-    this.connectionSettingsService.current = {
+    this.connectionSettingsService.save({
       WebserviceUrl: "https://remote.proffix.net:11011/pxapi/v2",
       WebservicePasswortHash: "16378f3e3bc8051435694595cbd222219d1ca7f9bddf649b9a0c819a77bb5e50"
-    };
+    });
     this.login = {
       Benutzer: "Gast",
       Passwort: "16ec7cb001be0525f9af1a96fd5ea26466b2e75ef3e96e881bcb7149cd7598da",
       Datenbank: { Name: "DEMODB", Bezeichnung: "" },
-      Module: this.appConfiguration.getRequiredLicencedModulesAsStringArray()
+      Module: this.appConfiguration.requiredLicencedModules
     };
   }
 
@@ -62,7 +60,8 @@ export class AppComponent implements OnInit {
     this.loginService.doLogin(this.login).subscribe(
       login => {
         this.login = login;
-        this.printLog(`Login erfolgreich: ${this.login.Mitarbeiter.Name}`);
+        const mitarbeiter = this.login.Mitarbeiter as Mitarbeiter;
+        this.printLog(`Login erfolgreich: ${mitarbeiter.Name}`);
         this.getStundeninfo();
       },
       loginError => this.printError(`Login fehlgeschlagen: ${JSON.stringify(loginError)}`)
@@ -70,16 +69,8 @@ export class AppComponent implements OnInit {
   }
 
   private getStundeninfo(): void {
-    this.m.getAll().subscribe(m => {
-      m.forEach(element => {
-        this.s.getStempel(element.MitarbeiterNr).subscribe(s => {
-          console.log(element);
-          console.log(s);
-        });
-      });
-    });
     this.printLog("Stundeninfo abrufen...");
-    this.stundeninfoService.getStundeninfo().subscribe(
+    this.httpService.get<Stundeninfo>("/ZEI/Stundeninfo").subscribe(
       stundeninfo => this.printLog(`Stundeninfo abrufen erfolgreich, aktueller Stundensaldo: ${stundeninfo.SaldoVortag}`),
       stundeninfoError => this.printError(`Stundeninfo abrufen fehlgeschlagen: ${JSON.stringify(stundeninfoError)}`)
     );

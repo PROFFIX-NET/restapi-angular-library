@@ -24,10 +24,10 @@ import { PxConfiguration, PxModule, PxVersion } from '@proffix/restapi-angular-l
 @Injectable()
 export class AppConfiguration extends PxConfiguration {
   public get requiredWebserviceVersion(): PxVersion {
-    return { Major: 2, Minor: 2, Patch: 0 };
+    return { Major: 2, Minor: 7, Patch: 1 };
   }
-  public get requiredLicencedModules(): PxModule[] {
-    return [ PxModule.ZEI, PxModule.ADR ];
+  public get requiredLicencedModules(): string[] {
+    return [ "ZEI", "ADR" ];
   }
 }
 ```
@@ -59,8 +59,11 @@ import { PxConnectionSettings, PxConnectionSettingsService } from '@proffix/rest
 
 // ...
 constructor(private connectionSettingsService: PxConnectionSettingsService) {
-  let connectionSettings: PxConnectionSettings =  { WebserviceUrl: "https://restapi.company.invalid", WebservicePasswortHash: "d3612ab62..."}
-  connectionSettingsService.current = connectionSettings;
+  let connectionSettings: PxConnectionSettings =  {
+    WebserviceUrl: "https://restapi.company.invalid",
+    WebservicePasswortHash: "d3612ab62..."
+  };
+  connectionSettingsService.save(connectionSettings);
 }
 ```
 Hinweis: Der SHA256 kann über die statische Methode `Hash.sha256` erstellt werden, nachdem die Klasse `Hash` importiert wurde.
@@ -80,9 +83,9 @@ constructor(private loginService: PxLoginService, private configuration: PxConfi
     Passwort: "d3612ab62...",
     Datenbank: { Name: "PXDB" },
     Module: this.configuration.getRequiredLicencedModulesAsStringArray() // Die Module können aus der AppConfiguration gelesen werden
-  }
+  };
   this.loginService.doLogin(login).subscribe( // nur zu Anschauungszwecken, nie HTTP-Requests in einem Konstruktor absetzen
-      login => console.log("Login successed: " + login.Benutzer),
+      login => console.log("Login successful: " + login.Benutzer),
       error => console.log("Login failed")
     );
 }
