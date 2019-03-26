@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { throwError, Observable, BehaviorSubject } from 'rxjs';
-import { tap, mergeMap, finalize, map } from 'rxjs/operators';
+import { tap, mergeMap, finalize } from 'rxjs/operators';
 
 
 
@@ -25,7 +25,7 @@ export class PxLoginService {
 
   private login: PxLogin = null;
   private autoLogin: PxLogin = null;
-  private loginSubject: BehaviorSubject<PxLogin | PxError> = new BehaviorSubject<PxLogin>(null);
+  private loginSubject: BehaviorSubject<PxLogin | PxError | null> = new BehaviorSubject<PxLogin | PxError | null>(null);
 
   public constructor(
     private httpService: PxHttpService,
@@ -43,7 +43,7 @@ export class PxLoginService {
    * Bei erfolgreichem Login, befindet sich darin das PxLogin-Objekt, wenn der Login fehlschlägt wird ein Error geworfen.
    * Bei einem Logout oder wenn noch kein Login stattgefunden hat, wird null zurückgegeben.
    */
-  public get loginObservable(): Observable<PxLogin | PxError> {
+  public get loginObservable(): Observable<PxLogin | PxError | null> {
     return this.loginSubject.asObservable();
   }
 
@@ -52,14 +52,24 @@ export class PxLoginService {
    * @param login Login-Objekt vom erfolgreichen Login oder null bei einem Logout
    */
   public fireLoginSuccessful(login: PxLogin) {
-    this.loginSubject.next(login);
+    if (login === null || login === undefined) {
+      this.loginSubject.next(login);
+    } else {
+      Object.setPrototypeOf(login, PxLogin.prototype);
+      this.loginSubject.next(login);
+    }
   }
 
   /**
    * Feuert einen Error-Event in den Login-Stream
    */
   public fireLoginError(error: PxError): void {
-    this.loginSubject.next(error);
+    if (error === null || error === undefined) {
+      this.loginSubject.next(error);
+    } else {
+      Object.setPrototypeOf(error, PxError.prototype);
+      this.loginSubject.next(error);
+    }
   }
 
   /**
@@ -104,7 +114,7 @@ export class PxLoginService {
     if (!login) {
       login = this.login || this.autoLogin;
       if (!login) {
-        this.fireLoginError({Endpoint: this.endpoint, Type: "GENERIC", Status: 401, Message: "No Login object availible" });
+        this.fireLoginError({ Endpoint: this.endpoint, Type: "GENERIC", Status: 401, Message: "No Login object availible" });
         return throwError(null); // Kein Login gefunden, daher Fehler werfen
       }
     }
