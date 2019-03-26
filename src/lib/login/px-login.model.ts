@@ -3,7 +3,7 @@ import { PxDatenbank } from "../datenbank/px-datenbank.model";
 /**
  * Model für /PRO/Login
  */
-export interface PxLogin {
+export class PxLogin {
   Benutzer: string;
   Passwort: string;
   Mitarbeiter?: any;

@@ -1,3 +1,7 @@
+3.0.1 (26.03.2019)
+-------------------
+- Fix Login Service Error Handling Bug
+
 3.0.0 (14.12.2018)
 ==================
 - ***Breaking Change***: Sämtliche Datenmodelle entfernt, diese müssen zukünftig manuell und an das Projekt angepasst implementiert werden.
