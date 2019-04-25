@@ -1,4 +1,4 @@
-3.0.2
+3.0.2 (25.04.2019)
 -------------------
 - Http Client erweitert getWithMetaData
 
