@@ -1,3 +1,7 @@
+3.0.2
+-------------------
+- Http Client erweitert getWithMetaData
+
 3.0.1 (26.03.2019)
 -------------------
 - Fix Login Service Error Handling Bug

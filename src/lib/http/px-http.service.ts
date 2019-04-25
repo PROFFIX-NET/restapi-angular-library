@@ -29,13 +29,28 @@ export class PxHttpService {
   }
 
   /**
+   * GET-Request auf die REST API inklusive PxMetaData
+   * @param T Typ der erwartet wird und in den die Antwort gemappt wird
+   * @param endpoint Endpunkt der aufgerufen wird z.B ADR/Adresse oder ADR/Adresse/1
+   * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
+   */
+  public getWithMetaData<T>(endpoint: string, params?: object): Observable<{ metadata?: any, data: T }> {
+    return this.http.get<HttpResponse<T>>(this.getAbsolutUrl(endpoint), this.createRequestOption(params, 'response'))
+      .pipe(map(response => {
+        const metaData = response.headers ? JSON.parse(response.headers.get("pxmetadata")) : null;
+        return { metadata: metaData, data: response.body };
+      }));
+  }
+
+  /**
    * GET-Request auf die REST API
    * @param T Typ der erwartet wird und in den die Antwort gemappt wird
    * @param endpoint Endpunkt der aufgerufen wird z.B ADR/Adresse oder ADR/Adresse/1
    * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
    */
   public get<T>(endpoint: string, params?: object): Observable<T> {
-    return this.http.get<T>(this.getAbsolutUrl(endpoint), this.createRequestOption(params));
+    return this.getWithMetaData<T>(endpoint, params)
+      .pipe(map(response => response.data));
   }
 
   /**
@@ -45,11 +60,10 @@ export class PxHttpService {
    * @param params Object mit den Parametern welche dem Request mitgegeben werden sollen
    */
   public post(endpoint: string, body: any, params?: object): Observable<string> {
-    const option = this.createRequestOption(params);
     return this.http.post<HttpResponse<any>>(
       this.getAbsolutUrl(endpoint),
       JSON.stringify(body),
-      { headers: option.headers, params: option.params, observe: 'response' }
+      this.createRequestOption(params, 'response')
     ).pipe(
       map(response => {
         return response.headers.get("Location");
@@ -85,8 +99,9 @@ export class PxHttpService {
    * @param params URL-Parameter
    * @param body Body
    */
-  private createRequestOption(params?: object): { headers?: HttpHeaders, params?} {
-    const requestOptions: { headers?: HttpHeaders, params?: HttpParams } = {};
+// tslint:disable-next-line: max-line-length
+  private createRequestOption(params?: object, observe: 'body' | 'response' = 'body'): { headers?: HttpHeaders, params?: HttpParams, observe?: any } {
+    const requestOptions: { headers?: HttpHeaders, params?: HttpParams, observe?: any } = { observe: observe };
 
     // URL-Parameter hinzufügen, wenn vorhanden
     if (params) {
